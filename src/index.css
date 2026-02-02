@@ -1,0 +1,81 @@
+@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@keyframes fadeSlide {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeSlide {
+  animation: fadeSlide 1s ease forwards;
+}
+@keyframes scrollReveal {
+  from {
+    opacity: 0;
+    transform: translateY(60px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.scroll-reveal {
+  opacity: 1;
+  animation: scrollReveal 0.9s ease forwards;
+}
+@keyframes fadeLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeRight {
+  from {
+    opacity: 0;
+    transform: translateX(60px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-left {
+  animation: fadeLeft 0.9s ease forwards;
+}
+
+.animate-right {
+  animation: fadeRight 0.9s ease forwards;
+}
+body {
+  font-family: 'Nunito Sans', sans-serif;
+}
+.collage-img {
+  position: absolute;
+  width: 170px;
+  height: 230px;
+  object-fit: cover;
+  border-radius: 22px;
+  border: 6px solid white;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.collage-img:hover {
+  transform: scale(1.06) translateY(-12px);
+  box-shadow: 0 35px 70px rgba(0, 0, 0, 0.35);
+  z-index: 20;
+}
