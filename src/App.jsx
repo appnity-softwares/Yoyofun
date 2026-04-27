@@ -16,6 +16,12 @@ import AdminUsers from "./pages/Admin/AdminUsers"
 import AdminAuditLogs from "./pages/Admin/AdminAuditLogs"
 import AdminHero from "./pages/Admin/AdminHero"
 import AdminContent from "./pages/Admin/AdminContent"
+import AdminGallery from "./pages/Admin/AdminGallery"
+import AdminRestaurant from "./pages/Admin/AdminRestaurant"
+import AdminSuites from "./pages/Admin/AdminSuites"
+import AdminHalls from "./pages/Admin/AdminHalls"
+import AdminOffers from "./pages/Admin/AdminOffers"
+import AdminSEO from "./pages/Admin/AdminSEO"
 import AdminLayout from "./components/Admin/AdminLayout"
 import ProtectedAdminRoute from "./components/Admin/ProtectedAdminRoute"
 import Privacy from "./pages/Privacy"
@@ -65,7 +71,13 @@ function AppShell() {
         <Route path="/admin/tickets" element={<AdminPage><AdminTickets /></AdminPage>} />
         <Route path="/admin/bookings" element={<AdminPage><AdminBookings /></AdminPage>} />
         <Route path="/admin/messages" element={<AdminPage><AdminMessages /></AdminPage>} />
+        <Route path="/admin/gallery" element={<AdminPage><AdminGallery /></AdminPage>} />
+        <Route path="/admin/restaurant" element={<AdminPage><AdminRestaurant /></AdminPage>} />
+        <Route path="/admin/suites" element={<AdminPage><AdminSuites /></AdminPage>} />
+        <Route path="/admin/halls" element={<AdminPage><AdminHalls /></AdminPage>} />
+        <Route path="/admin/offers" element={<AdminPage roles={["super_admin", "admin"]}><AdminOffers /></AdminPage>} />
         <Route path="/admin/content" element={<AdminPage roles={["super_admin", "admin"]}><AdminContent /></AdminPage>} />
+        <Route path="/admin/seo" element={<AdminPage roles={["super_admin", "admin"]}><AdminSEO /></AdminPage>} />
         <Route path="/admin/settings" element={<AdminPage roles={["super_admin", "admin"]}><AdminSettings /></AdminPage>} />
         <Route path="/admin/users" element={<AdminPage roles={["super_admin", "admin"]}><AdminUsers /></AdminPage>} />
         <Route path="/admin/audit-logs" element={<AdminPage roles={["super_admin", "admin"]}><AdminAuditLogs /></AdminPage>} />

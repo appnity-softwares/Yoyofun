@@ -8,12 +8,13 @@ export const heroService = {
 
   // Admin
   adminList: async () => {
-    return apiRequest("/admin/hero-slides");
+    return apiRequest("/admin/hero-slides", { auth: true });
   },
 
   create: async (data) => {
     return apiRequest("/admin/hero-slides", {
       method: "POST",
+      auth: true,
       body: data,
     });
   },
@@ -21,6 +22,7 @@ export const heroService = {
   update: async (id, data) => {
     return apiRequest(`/admin/hero-slides/${id}`, {
       method: "PATCH",
+      auth: true,
       body: data,
     });
   },
@@ -28,6 +30,7 @@ export const heroService = {
   delete: async (id) => {
     return apiRequest(`/admin/hero-slides/${id}`, {
       method: "DELETE",
+      auth: true,
     });
   },
 };

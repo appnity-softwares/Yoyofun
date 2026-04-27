@@ -28,7 +28,7 @@ func (s *ContentService) FindBySlug(ctx context.Context, slug string) (*models.C
 	return &page, nil
 }
 
-func (s *ContentService) AdminList(ctx context.Context) ([]models.ContentPage, error) {
+func (s *ContentService) List(ctx context.Context) ([]models.ContentPage, error) {
 	var pages []models.ContentPage
 	if err := s.db.WithContext(ctx).Order("created_at desc").Find(&pages).Error; err != nil {
 		return nil, err

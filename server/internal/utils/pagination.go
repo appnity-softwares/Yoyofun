@@ -23,3 +23,15 @@ func parsePositiveInt(value string, fallback int) int {
 	}
 	return parsed
 }
+
+func QueryInt(c *gin.Context, key string, fallback int) int {
+	val := c.Query(key)
+	if val == "" {
+		return fallback
+	}
+	parsed, err := strconv.Atoi(val)
+	if err != nil {
+		return fallback
+	}
+	return parsed
+}

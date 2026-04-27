@@ -60,8 +60,8 @@ func (s *SettingsService) CreateDefault(ctx context.Context) (*models.SiteSettin
 		PhoneNumbers:    datatypes.JSON(phones),
 		Address:         "YOYO FUN N FOODS, Madhya Pradesh, India",
 		SocialLinks:     datatypes.JSON(social),
-		SEOTitle:        "YOYO FUN N FOODS - Water Park Booking",
-		SEODescription:  "Book tickets for YOYO FUN N FOODS and enjoy a safe, fun-filled park experience.",
+		MetaTitle:       "YOYO FUN N FOODS - Water Park Booking",
+		MetaDescription: "Book tickets for YOYO FUN N FOODS and enjoy a safe, fun-filled park experience.",
 		RazorpayEnabled: true,
 		MaintenanceMode: false,
 		FeatureToggles:  datatypes.JSON(toggles),
@@ -93,8 +93,8 @@ func (s *SettingsService) Update(ctx context.Context, input SettingsInput, admin
 	setting.PhoneNumbers = datatypes.JSON(phones)
 	setting.Address = input.Address
 	setting.SocialLinks = datatypes.JSON(social)
-	setting.SEOTitle = input.SEOTitle
-	setting.SEODescription = input.SEODescription
+	setting.MetaTitle = input.SEOTitle
+	setting.MetaDescription = input.SEODescription
 	setting.RazorpayEnabled = input.RazorpayEnabled
 	setting.MaintenanceMode = input.MaintenanceMode
 	setting.FeatureToggles = datatypes.JSON(toggles)
@@ -114,8 +114,8 @@ func PublicSettings(setting *models.SiteSetting) map[string]interface{} {
 		"phone_numbers":    setting.PhoneNumbers,
 		"address":          setting.Address,
 		"social_links":     setting.SocialLinks,
-		"seo_title":        setting.SEOTitle,
-		"seo_description":  setting.SEODescription,
+		"seo_title":        setting.MetaTitle,
+		"seo_description":  setting.MetaDescription,
 		"razorpay_enabled": setting.RazorpayEnabled,
 		"maintenance_mode": setting.MaintenanceMode,
 		"feature_toggles":  setting.FeatureToggles,

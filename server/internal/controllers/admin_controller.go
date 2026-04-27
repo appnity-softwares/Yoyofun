@@ -350,13 +350,35 @@ func (ctl *AdminController) Upload(c *gin.Context) {
 		utils.BadRequest(c, "A file is required.", nil)
 		return
 	}
-	result, err := ctl.uploads.Save(c.Request.Context(), fileHeader)
+	folder := c.DefaultQuery("folder", "general")
+	asset, err := ctl.uploads.Save(c.Request.Context(), *currentAdminID(c), fileHeader, folder, c.ClientIP())
 	if err != nil {
 		utils.BadRequest(c, err.Error(), nil)
 		return
 	}
-	ctl.audit.Log(c.Request.Context(), currentAdminID(c), "upload", "uploads", map[string]interface{}{"file_name": result.FileName}, c.ClientIP())
-	utils.Created(c, "File uploaded.", result)
+	utils.Created(c, "File uploaded.", asset)
+}
+
+func (ctl *AdminController) ListMedia(c *gin.Context) {
+	page, limit, _ := utils.ParsePagination(c)
+	assets, total, err := ctl.uploads.List(c.Request.Context(), page, limit)
+	if err != nil {
+		handleServiceError(c, err)
+		return
+	}
+	utils.Paginated(c, "Media library loaded.", assets, page, limit, total)
+}
+
+func (ctl *AdminController) DeleteMedia(c *gin.Context) {
+	id, ok := uuidParam(c, "id")
+	if !ok {
+		return
+	}
+	if err := ctl.uploads.Delete(c.Request.Context(), *currentAdminID(c), id, c.ClientIP()); err != nil {
+		handleServiceError(c, err)
+		return
+	}
+	utils.OK(c, "Media asset deleted.", nil)
 }
 
 func roleCanManageUsers(role string) bool {
@@ -415,7 +437,7 @@ func (ctl *AdminController) DeleteHeroSlide(c *gin.Context) {
 }
 
 func (ctl *AdminController) ListContent(c *gin.Context) {
-	pages, err := ctl.content.AdminList(c.Request.Context())
+	pages, err := ctl.content.List(c.Request.Context())
 	if err != nil {
 		handleServiceError(c, err)
 		return

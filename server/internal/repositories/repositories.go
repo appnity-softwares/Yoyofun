@@ -19,6 +19,13 @@ type Repositories struct {
 	Settings   *SiteSettingRepository
 	AuditLogs  *AuditLogRepository
 	HeroSlides *HeroSlideRepository
+	Media      *MediaAssetRepository
+	SEO        *SEORepository
+	Gallery    *GalleryRepository
+	Restaurant *RestaurantRepository
+	Suites     *SuiteRepository
+	Halls      *HallRepository
+	Offers     *OfferRepository
 }
 
 func New(db *gorm.DB) *Repositories {
@@ -30,6 +37,13 @@ func New(db *gorm.DB) *Repositories {
 		Settings:   NewSiteSettingRepository(db),
 		AuditLogs:  NewAuditLogRepository(db),
 		HeroSlides: NewHeroSlideRepository(db),
+		Media:      NewMediaAssetRepository(db),
+		SEO:        NewSEORepository(db),
+		Gallery:    NewGalleryRepository(db),
+		Restaurant: NewRestaurantRepository(db),
+		Suites:     NewSuiteRepository(db),
+		Halls:      NewHallRepository(db),
+		Offers:     NewOfferRepository(db),
 	}
 }
 
@@ -454,4 +468,294 @@ func (r *HeroSlideRepository) ListAdmin(ctx context.Context) ([]models.HeroSlide
 	var slides []models.HeroSlide
 	err := r.db.WithContext(ctx).Order("sort_order ASC, created_at DESC").Find(&slides).Error
 	return slides, err
+}
+
+type MediaAssetRepository struct {
+	db *gorm.DB
+}
+
+func NewMediaAssetRepository(db *gorm.DB) *MediaAssetRepository {
+	return &MediaAssetRepository{db: db}
+}
+
+func (r *MediaAssetRepository) Create(ctx context.Context, asset *models.MediaAsset) error {
+	return r.db.WithContext(ctx).Create(asset).Error
+}
+
+func (r *MediaAssetRepository) FindByID(ctx context.Context, id uuid.UUID) (*models.MediaAsset, error) {
+	var asset models.MediaAsset
+	err := r.db.WithContext(ctx).Preload("UploadedBy").First(&asset, "id = ?", id).Error
+	return &asset, err
+}
+
+func (r *MediaAssetRepository) List(ctx context.Context, page int, limit int) ([]models.MediaAsset, int64, error) {
+	var assets []models.MediaAsset
+	var total int64
+	query := r.db.WithContext(ctx).Model(&models.MediaAsset{}).Preload("UploadedBy")
+
+	if err := query.Count(&total).Error; err != nil {
+		return nil, 0, err
+	}
+
+	err := query.Order("created_at DESC").Limit(limit).Offset((page - 1) * limit).Find(&assets).Error
+	return assets, total, err
+}
+
+func (r *MediaAssetRepository) Delete(ctx context.Context, asset *models.MediaAsset) error {
+	return r.db.WithContext(ctx).Delete(asset).Error
+}
+
+// SEORepository
+type SEORepository struct {
+	db *gorm.DB
+}
+
+func NewSEORepository(db *gorm.DB) *SEORepository {
+	return &SEORepository{db: db}
+}
+
+func (r *SEORepository) FindBySlug(ctx context.Context, slug string) (*models.SEOPage, error) {
+	var page models.SEOPage
+	err := r.db.WithContext(ctx).Where("page_slug = ?", slug).First(&page).Error
+	return &page, err
+}
+
+func (r *SEORepository) Save(ctx context.Context, page *models.SEOPage) error {
+	return r.db.WithContext(ctx).Save(page).Error
+}
+
+func (r *SEORepository) List(ctx context.Context) ([]models.SEOPage, error) {
+	var pages []models.SEOPage
+	err := r.db.WithContext(ctx).Order("page_slug ASC").Find(&pages).Error
+	return pages, err
+}
+
+// GalleryRepository
+type GalleryRepository struct {
+	db *gorm.DB
+}
+
+func NewGalleryRepository(db *gorm.DB) *GalleryRepository {
+	return &GalleryRepository{db: db}
+}
+
+func (r *GalleryRepository) ListPublic(ctx context.Context) ([]models.GalleryItem, error) {
+	var items []models.GalleryItem
+	err := r.db.WithContext(ctx).Where("is_active = ?", true).Order("sort_order ASC").Find(&items).Error
+	return items, err
+}
+
+func (r *GalleryRepository) ListAdmin(ctx context.Context) ([]models.GalleryItem, error) {
+	var items []models.GalleryItem
+	err := r.db.WithContext(ctx).Order("sort_order ASC").Find(&items).Error
+	return items, err
+}
+
+func (r *GalleryRepository) Create(ctx context.Context, item *models.GalleryItem) error {
+	return r.db.WithContext(ctx).Create(item).Error
+}
+
+func (r *GalleryRepository) Save(ctx context.Context, item *models.GalleryItem) error {
+	return r.db.WithContext(ctx).Save(item).Error
+}
+
+func (r *GalleryRepository) Delete(ctx context.Context, item *models.GalleryItem) error {
+	return r.db.WithContext(ctx).Delete(item).Error
+}
+
+func (r *GalleryRepository) FindByID(ctx context.Context, id uuid.UUID) (*models.GalleryItem, error) {
+	var item models.GalleryItem
+	err := r.db.WithContext(ctx).First(&item, "id = ?", id).Error
+	return &item, err
+}
+
+// RestaurantRepository
+type RestaurantRepository struct {
+	db *gorm.DB
+}
+
+func NewRestaurantRepository(db *gorm.DB) *RestaurantRepository {
+	return &RestaurantRepository{db: db}
+}
+
+func (r *RestaurantRepository) ListPublic(ctx context.Context) ([]models.RestaurantItem, error) {
+	var items []models.RestaurantItem
+	err := r.db.WithContext(ctx).Where("is_active = ?", true).Order("sort_order ASC").Find(&items).Error
+	return items, err
+}
+
+func (r *RestaurantRepository) ListAdmin(ctx context.Context) ([]models.RestaurantItem, error) {
+	var items []models.RestaurantItem
+	err := r.db.WithContext(ctx).Order("sort_order ASC").Find(&items).Error
+	return items, err
+}
+
+func (r *RestaurantRepository) Create(ctx context.Context, item *models.RestaurantItem) error {
+	return r.db.WithContext(ctx).Create(item).Error
+}
+
+func (r *RestaurantRepository) Save(ctx context.Context, item *models.RestaurantItem) error {
+	return r.db.WithContext(ctx).Save(item).Error
+}
+
+func (r *RestaurantRepository) Delete(ctx context.Context, item *models.RestaurantItem) error {
+	return r.db.WithContext(ctx).Delete(item).Error
+}
+
+func (r *RestaurantRepository) FindByID(ctx context.Context, id uuid.UUID) (*models.RestaurantItem, error) {
+	var item models.RestaurantItem
+	err := r.db.WithContext(ctx).First(&item, "id = ?", id).Error
+	return &item, err
+}
+
+// SuiteRepository
+type SuiteRepository struct {
+	db *gorm.DB
+}
+
+func NewSuiteRepository(db *gorm.DB) *SuiteRepository {
+	return &SuiteRepository{db: db}
+}
+
+func (r *SuiteRepository) ListPublic(ctx context.Context) ([]models.SuiteRoom, error) {
+	var suites []models.SuiteRoom
+	err := r.db.WithContext(ctx).Where("is_active = ?", true).Order("sort_order ASC").Find(&suites).Error
+	return suites, err
+}
+
+func (r *SuiteRepository) ListAdmin(ctx context.Context) ([]models.SuiteRoom, error) {
+	var suites []models.SuiteRoom
+	err := r.db.WithContext(ctx).Order("sort_order ASC").Find(&suites).Error
+	return suites, err
+}
+
+func (r *SuiteRepository) FindBySlug(ctx context.Context, slug string) (*models.SuiteRoom, error) {
+	var suite models.SuiteRoom
+	err := r.db.WithContext(ctx).Where("slug = ?", slug).First(&suite).Error
+	return &suite, err
+}
+
+func (r *SuiteRepository) Create(ctx context.Context, suite *models.SuiteRoom) error {
+	return r.db.WithContext(ctx).Create(suite).Error
+}
+
+func (r *SuiteRepository) Save(ctx context.Context, suite *models.SuiteRoom) error {
+	return r.db.WithContext(ctx).Save(suite).Error
+}
+
+func (r *SuiteRepository) Delete(ctx context.Context, suite *models.SuiteRoom) error {
+	return r.db.WithContext(ctx).Delete(suite).Error
+}
+
+func (r *SuiteRepository) FindByID(ctx context.Context, id uuid.UUID) (*models.SuiteRoom, error) {
+	var suite models.SuiteRoom
+	err := r.db.WithContext(ctx).First(&suite, "id = ?", id).Error
+	return &suite, err
+}
+
+// HallRepository
+type HallRepository struct {
+	db *gorm.DB
+}
+
+func NewHallRepository(db *gorm.DB) *HallRepository {
+	return &HallRepository{db: db}
+}
+
+func (r *HallRepository) ListPackagesPublic(ctx context.Context) ([]models.HallPackage, error) {
+	var packages []models.HallPackage
+	err := r.db.WithContext(ctx).Where("is_active = ?", true).Order("sort_order ASC").Find(&packages).Error
+	return packages, err
+}
+
+func (r *HallRepository) ListPackagesAdmin(ctx context.Context) ([]models.HallPackage, error) {
+	var packages []models.HallPackage
+	err := r.db.WithContext(ctx).Order("sort_order ASC").Find(&packages).Error
+	return packages, err
+}
+
+func (r *HallRepository) CreatePackage(ctx context.Context, pkg *models.HallPackage) error {
+	return r.db.WithContext(ctx).Create(pkg).Error
+}
+
+func (r *HallRepository) SavePackage(ctx context.Context, pkg *models.HallPackage) error {
+	return r.db.WithContext(ctx).Save(pkg).Error
+}
+
+func (r *HallRepository) DeletePackage(ctx context.Context, pkg *models.HallPackage) error {
+	return r.db.WithContext(ctx).Delete(pkg).Error
+}
+
+func (r *HallRepository) FindPackageByID(ctx context.Context, id uuid.UUID) (*models.HallPackage, error) {
+	var pkg models.HallPackage
+	err := r.db.WithContext(ctx).First(&pkg, "id = ?", id).Error
+	return &pkg, err
+}
+
+func (r *HallRepository) CreateEnquiry(ctx context.Context, enquiry *models.HallEnquiry) error {
+	return r.db.WithContext(ctx).Create(enquiry).Error
+}
+
+func (r *HallRepository) ListEnquiries(ctx context.Context, page, limit int) ([]models.HallEnquiry, int64, error) {
+	var enquiries []models.HallEnquiry
+	var total int64
+	query := r.db.WithContext(ctx).Model(&models.HallEnquiry{})
+	if err := query.Count(&total).Error; err != nil {
+		return nil, 0, err
+	}
+	err := query.Order("created_at DESC").Limit(limit).Offset((page - 1) * limit).Find(&enquiries).Error
+	return enquiries, total, err
+}
+
+func (r *HallRepository) FindEnquiryByID(ctx context.Context, id uuid.UUID) (*models.HallEnquiry, error) {
+	var enquiry models.HallEnquiry
+	err := r.db.WithContext(ctx).First(&enquiry, "id = ?", id).Error
+	return &enquiry, err
+}
+
+func (r *HallRepository) SaveEnquiry(ctx context.Context, enquiry *models.HallEnquiry) error {
+	return r.db.WithContext(ctx).Save(enquiry).Error
+}
+
+// OfferRepository
+type OfferRepository struct {
+	db *gorm.DB
+}
+
+func NewOfferRepository(db *gorm.DB) *OfferRepository {
+	return &OfferRepository{db: db}
+}
+
+func (r *OfferRepository) ListActive(ctx context.Context) ([]models.Offer, error) {
+	var offers []models.Offer
+	now := time.Now()
+	err := r.db.WithContext(ctx).
+		Where("is_active = ? AND (starts_at IS NULL OR starts_at <= ?) AND (ends_at IS NULL OR ends_at >= ?)", true, now, now).
+		Order("created_at DESC").
+		Find(&offers).Error
+	return offers, err
+}
+
+func (r *OfferRepository) ListAdmin(ctx context.Context) ([]models.Offer, error) {
+	var offers []models.Offer
+	err := r.db.WithContext(ctx).Order("created_at DESC").Find(&offers).Error
+	return offers, err
+}
+
+func (r *OfferRepository) Create(ctx context.Context, offer *models.Offer) error {
+	return r.db.WithContext(ctx).Create(offer).Error
+}
+
+func (r *OfferRepository) Save(ctx context.Context, offer *models.Offer) error {
+	return r.db.WithContext(ctx).Save(offer).Error
+}
+
+func (r *OfferRepository) Delete(ctx context.Context, offer *models.Offer) error {
+	return r.db.WithContext(ctx).Delete(offer).Error
+}
+
+func (r *OfferRepository) FindByID(ctx context.Context, id uuid.UUID) (*models.Offer, error) {
+	var offer models.Offer
+	err := r.db.WithContext(ctx).First(&offer, "id = ?", id).Error
+	return &offer, err
 }

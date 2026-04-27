@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Trash2, Edit2, Save, X, MoveUp, MoveDown, Image as ImageIcon } from 'lucide-react';
 import { heroService } from '../../services/heroService';
+import ImageUploadField from '../../components/Admin/ImageUploadField';
 
 export default function AdminHero() {
     const [slides, setSlides] = useState([]);
@@ -102,17 +103,13 @@ export default function AdminHero() {
 
                     <form onSubmit={handleSave} className="space-y-6">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div className="space-y-2">
-                                <label className="text-xs font-black text-gray-400 uppercase tracking-widest">Background Image URL</label>
-                                <input
-                                    type="url"
-                                    value={formData.image_url}
-                                    onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
-                                    className="w-full p-4 bg-gray-50 rounded-2xl border-none ring-1 ring-gray-100 focus:ring-2 focus:ring-blue-600 outline-none transition-all font-bold"
-                                    placeholder="https://images.unsplash.com/..."
-                                    required
-                                />
-                            </div>
+                            <ImageUploadField
+                                label="Background Image"
+                                value={formData.image_url}
+                                folder="hero"
+                                onChange={(url) => setFormData({ ...formData, image_url: url })}
+                                placeholder="Choose slide background"
+                            />
                             <div className="space-y-2">
                                 <label className="text-xs font-black text-gray-400 uppercase tracking-widest">Main Headline</label>
                                 <input

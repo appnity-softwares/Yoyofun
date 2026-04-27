@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { adminService } from "../../services/adminService";
 import LoadingSpinner from "../../components/common/LoadingSpinner";
+import ImageUploadField from "../../components/Admin/ImageUploadField";
 
 const emptySettings = {
   site_name: "YOYO FUN N FOODS",
@@ -93,10 +94,13 @@ export default function AdminSettings() {
             <span className="text-xs font-black uppercase tracking-widest text-slate-400">Site Name</span>
             <input value={form.site_name} onChange={(event) => update("site_name", event.target.value)} required className="w-full rounded-lg border border-slate-200 p-3 font-bold outline-none focus:border-blue-500" />
           </label>
-          <label className="space-y-2">
-            <span className="text-xs font-black uppercase tracking-widest text-slate-400">Logo URL</span>
-            <input value={form.logo_url || ""} onChange={(event) => update("logo_url", event.target.value)} className="w-full rounded-lg border border-slate-200 p-3 font-bold outline-none focus:border-blue-500" />
-          </label>
+          <ImageUploadField 
+            label="Logo Image"
+            value={form.logo_url}
+            folder="settings"
+            onChange={(url) => update("logo_url", url)}
+            placeholder="Select site logo"
+          />
           <label className="space-y-2">
             <span className="text-xs font-black uppercase tracking-widest text-slate-400">Contact Email</span>
             <input type="email" value={form.contact_email || ""} onChange={(event) => update("contact_email", event.target.value)} className="w-full rounded-lg border border-slate-200 p-3 font-bold outline-none focus:border-blue-500" />

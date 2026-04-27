@@ -94,28 +94,28 @@ func main() {
 	slides := []models.HeroSlide{
 		{
 			ImageURL:    "https://images.unsplash.com/photo-1542332213-9b5a5a3fad35?q=80&w=1600&auto=format&fit=crop",
-			Headline:    "Dive into Central India's Most Thrilling Waterpark!",
-			Subheadline: "Over 25+ massive slides, wave pools, and kids zones for the perfect family day out.",
-			CTAUrl:      "/tickets",
-			CTAText:     "Book Your Splash Now",
+			Title:       "Dive into Central India's Most Thrilling Waterpark!",
+			Subtitle:    "Over 25+ massive slides, wave pools, and kids zones for the perfect family day out.",
+			CTAURL:      "/tickets",
+			CTALabel:     "Book Your Splash Now",
 			SortOrder:   1,
 			IsActive:    true,
 		},
 		{
 			ImageURL:    "https://images.unsplash.com/photo-1519817650390-64a93db51149?q=80&w=1600&auto=format&fit=crop",
-			Headline:    "Experience the Ocean in Indore - Massive Wave Pool!",
-			Subheadline: "Ride the tides with our world-class wave system. Safe, fun, and purely refreshing.",
-			CTAUrl:      "/gallery",
-			CTAText:     "See All Attractions",
+			Title:       "Experience the Ocean in Indore - Massive Wave Pool!",
+			Subtitle:    "Ride the tides with our world-class wave system. Safe, fun, and purely refreshing.",
+			CTAURL:      "/gallery",
+			CTALabel:     "See All Attractions",
 			SortOrder:   2,
 			IsActive:    true,
 		},
 		{
 			ImageURL:    "https://images.unsplash.com/photo-1582650625119-3a31f8fa2699?q=80&w=1600&auto=format&fit=crop",
-			Headline:    "High-Speed Thrills: The Vertical Drop Slide",
-			Subheadline: "Are you brave enough? Test your limits on our newest vertical drop experience.",
-			CTAUrl:      "/tickets",
-			CTAText:     "Grab Tickets - ₹499 Onwards",
+			Title:       "High-Speed Thrills: The Vertical Drop Slide",
+			Subtitle:    "Are you brave enough? Test your limits on our newest vertical drop experience.",
+			CTAURL:      "/tickets",
+			CTALabel:     "Grab Tickets - ₹499 Onwards",
 			SortOrder:   3,
 			IsActive:    true,
 		},
@@ -123,7 +123,7 @@ func main() {
 
 	for _, s := range slides {
 		db.Create(&s)
-		fmt.Printf("Created Hero Slide: %s\n", s.Headline)
+		fmt.Printf("Created Hero Slide: %s\n", s.Title)
 	}
 
 	fmt.Println("\nSeeding Content Pages...")

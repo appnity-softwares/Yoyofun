@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { BarChart3, BookOpen, ClipboardList, FileClock, LayoutDashboard, MessageSquare, Settings, Ticket, Users, FileText } from "lucide-react";
+import { BarChart3, BookOpen, ClipboardList, FileClock, LayoutDashboard, MessageSquare, Settings, Ticket, Users, FileText, Image as ImageIcon, Utensils, Bed, GraduationCap, Tag, Search } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
 
 const navItems = [
@@ -8,7 +8,13 @@ const navItems = [
   { label: "Tickets", path: "/admin/tickets", icon: Ticket },
   { label: "Bookings", path: "/admin/bookings", icon: ClipboardList },
   { label: "Messages", path: "/admin/messages", icon: MessageSquare },
+  { label: "Gallery", path: "/admin/gallery", icon: ImageIcon },
+  { label: "Restaurant", path: "/admin/restaurant", icon: Utensils },
+  { label: "Suites & Rooms", path: "/admin/suites", icon: Bed },
+  { label: "Events & Halls", path: "/admin/halls", icon: GraduationCap },
+  { label: "Promotions", path: "/admin/offers", icon: Tag, roles: ["super_admin", "admin"] },
   { label: "Content Mgmt", path: "/admin/content", icon: FileText, roles: ["super_admin", "admin"] },
+  { label: "SEO Manager", path: "/admin/seo", icon: Search, roles: ["super_admin", "admin"] },
   { label: "Settings", path: "/admin/settings", icon: Settings, roles: ["super_admin", "admin"] },
   { label: "Users", path: "/admin/users", icon: Users, roles: ["super_admin", "admin"] },
   { label: "Audit Logs", path: "/admin/audit-logs", icon: FileClock, roles: ["super_admin", "admin"] },

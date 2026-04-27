@@ -40,7 +40,13 @@ type Config struct {
 	AdminPassword           string
 	UploadsStorage          string
 	UploadDir               string
-	CloudinaryURL           string
+	MaxUploadSizeBytes      int64
+	R2AccountID             string
+	R2AccessKeyID           string
+	R2SecretAccessKey       string
+	R2Bucket                string
+	R2PublicBaseURL         string
+	R2Region                string
 }
 
 func Load() (*Config, error) {
@@ -76,7 +82,13 @@ func Load() (*Config, error) {
 		AdminPassword:           os.Getenv("ADMIN_PASSWORD"),
 		UploadsStorage:          getEnv("UPLOADS_STORAGE", "local"),
 		UploadDir:               getEnv("UPLOAD_DIR", "uploads"),
-		CloudinaryURL:           os.Getenv("CLOUDINARY_URL"),
+		MaxUploadSizeBytes:      int64(getInt("MAX_UPLOAD_SIZE_BYTES", 5<<20)), // Default 5MB
+		R2AccountID:             os.Getenv("R2_ACCOUNT_ID"),
+		R2AccessKeyID:           os.Getenv("R2_ACCESS_KEY_ID"),
+		R2SecretAccessKey:       os.Getenv("R2_SECRET_ACCESS_KEY"),
+		R2Bucket:                os.Getenv("R2_BUCKET"),
+		R2PublicBaseURL:         getEnv("R2_PUBLIC_BASE_URL", ""),
+		R2Region:                getEnv("R2_REGION", "auto"),
 	}
 
 	if cfg.AppEnv == "production" {

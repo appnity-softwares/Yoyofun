@@ -51,7 +51,7 @@ func handleServiceError(c *gin.Context, err error) {
 	case errors.Is(err, services.ErrInactiveAccount):
 		utils.Forbidden(c, "This admin account is inactive.")
 	case errors.Is(err, services.ErrNotFound):
-		utils.NotFound(c, "The requested resource was not found.")
+		utils.NotFound(c, "The requested resource was not found.", nil)
 	case errors.Is(err, services.ErrInsufficientStock):
 		utils.BadRequest(c, "Selected ticket does not have enough stock.", nil)
 	case errors.Is(err, services.ErrInvalidSignature):

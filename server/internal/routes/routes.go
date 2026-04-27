@@ -37,6 +37,21 @@ func Setup(router *gin.Engine, cfg *config.Config, db *gorm.DB, repos *repositor
 	adminCtl := controllers.NewAdminController(svc)
 	webhookCtl := controllers.NewWebhookController(svc.Razorpay, svc.Bookings)
 
+	galleryCtl := controllers.NewGalleryController(svc)
+	adminGalleryCtl := controllers.NewAdminGalleryController(svc)
+	restaurantCtl := controllers.NewRestaurantController(svc)
+	adminRestaurantCtl := controllers.NewAdminRestaurantController(svc)
+	suiteCtl := controllers.NewSuiteController(svc)
+	adminSuiteCtl := controllers.NewAdminSuiteController(svc)
+	hallCtl := controllers.NewHallController(svc)
+	adminHallCtl := controllers.NewAdminHallController(svc)
+	seoCtl := controllers.NewSEOController(svc)
+	adminSeoCtl := controllers.NewAdminSEOController(svc)
+	offerCtl := controllers.NewOfferController(svc)
+	adminOfferCtl := controllers.NewAdminOfferController(svc)
+
+	seoManagerCtl := controllers.NewSEOManagerController(cfg, svc)
+
 	api := router.Group("/api")
 	api.GET("/health", func(c *gin.Context) {
 		sqlDB, err := db.DB()
@@ -47,6 +62,10 @@ func Setup(router *gin.Engine, cfg *config.Config, db *gorm.DB, repos *repositor
 		c.JSON(http.StatusOK, gin.H{"success": true, "message": "YOYO API healthy"})
 	})
 
+	// Public SEO Files (root level)
+	router.GET("/sitemap.xml", seoManagerCtl.Sitemap)
+	router.GET("/robots.txt", seoManagerCtl.Robots)
+
 	api.GET("/tickets", publicCtl.Tickets)
 	api.GET("/tickets/:slug", publicCtl.TicketBySlug)
 	api.POST("/contact", middleware.RateLimit(cfg.ContactRateLimitPerHour, time.Hour), publicCtl.Contact)
@@ -56,6 +75,15 @@ func Setup(router *gin.Engine, cfg *config.Config, db *gorm.DB, repos *repositor
 	api.POST("/bookings/verify-payment", middleware.RateLimit(cfg.PaymentRateLimitPerHour, time.Hour), publicCtl.VerifyPayment)
 	api.POST("/webhooks/razorpay", webhookCtl.Razorpay)
 	api.GET("/content/:slug", publicCtl.GetContent)
+
+	api.GET("/gallery", galleryCtl.List)
+	api.GET("/restaurant/items", restaurantCtl.ListItems)
+	api.GET("/suites", suiteCtl.List)
+	api.GET("/suites/:slug", suiteCtl.GetBySlug)
+	api.GET("/halls/packages", hallCtl.ListPackages)
+	api.POST("/halls/enquiries", hallCtl.SubmitEnquiry)
+	api.GET("/seo/:slug", seoCtl.GetSEO)
+	api.GET("/offers/active", offerCtl.ListActive)
 
 	adminAuth := api.Group("/admin/auth")
 	adminAuth.POST("/login", middleware.RateLimit(cfg.LoginRateLimitPerHour, time.Hour), authCtl.Login)
@@ -93,7 +121,10 @@ func Setup(router *gin.Engine, cfg *config.Config, db *gorm.DB, repos *repositor
 	admin.DELETE("/users/:id", middleware.RequireRoles(models.RoleSuperAdmin), adminCtl.DeleteUser)
 
 	admin.GET("/audit-logs", middleware.RequireRoles(models.RoleSuperAdmin, models.RoleAdmin), adminCtl.ListAuditLogs)
+	
 	admin.POST("/uploads", middleware.RequireRoles(models.RoleSuperAdmin, models.RoleAdmin), adminCtl.Upload)
+	admin.GET("/media", middleware.RequireRoles(models.RoleSuperAdmin, models.RoleAdmin), adminCtl.ListMedia)
+	admin.DELETE("/media/:id", middleware.RequireRoles(models.RoleSuperAdmin, models.RoleAdmin), adminCtl.DeleteMedia)
 
 	admin.GET("/hero-slides", adminCtl.ListHeroSlides)
 	admin.POST("/hero-slides", middleware.RequireRoles(models.RoleSuperAdmin, models.RoleAdmin), adminCtl.CreateHeroSlide)
@@ -103,4 +134,40 @@ func Setup(router *gin.Engine, cfg *config.Config, db *gorm.DB, repos *repositor
 	admin.GET("/content", adminCtl.ListContent)
 	admin.GET("/content/:slug", adminCtl.GetContent)
 	admin.PATCH("/content/:slug", middleware.RequireRoles(models.RoleSuperAdmin, models.RoleAdmin), adminCtl.UpdateContent)
+
+	// Gallery
+	admin.GET("/gallery", adminGalleryCtl.List)
+	admin.POST("/gallery", middleware.RequireRoles(models.RoleSuperAdmin, models.RoleAdmin), adminGalleryCtl.Create)
+	admin.PATCH("/gallery/:id", middleware.RequireRoles(models.RoleSuperAdmin, models.RoleAdmin), adminGalleryCtl.Update)
+	admin.DELETE("/gallery/:id", middleware.RequireRoles(models.RoleSuperAdmin, models.RoleAdmin), adminGalleryCtl.Delete)
+
+	// Restaurant
+	admin.GET("/restaurant/items", adminRestaurantCtl.ListItems)
+	admin.POST("/restaurant/items", middleware.RequireRoles(models.RoleSuperAdmin, models.RoleAdmin), adminRestaurantCtl.CreateItem)
+	admin.PATCH("/restaurant/items/:id", middleware.RequireRoles(models.RoleSuperAdmin, models.RoleAdmin), adminRestaurantCtl.UpdateItem)
+	admin.DELETE("/restaurant/items/:id", middleware.RequireRoles(models.RoleSuperAdmin, models.RoleAdmin), adminRestaurantCtl.DeleteItem)
+
+	// Suites
+	admin.GET("/suites", adminSuiteCtl.List)
+	admin.POST("/suites", middleware.RequireRoles(models.RoleSuperAdmin, models.RoleAdmin), adminSuiteCtl.Create)
+	admin.PATCH("/suites/:id", middleware.RequireRoles(models.RoleSuperAdmin, models.RoleAdmin), adminSuiteCtl.Update)
+	admin.DELETE("/suites/:id", middleware.RequireRoles(models.RoleSuperAdmin, models.RoleAdmin), adminSuiteCtl.Delete)
+
+	// Halls
+	admin.GET("/halls/packages", adminHallCtl.ListPackages)
+	admin.POST("/halls/packages", middleware.RequireRoles(models.RoleSuperAdmin, models.RoleAdmin), adminHallCtl.CreatePackage)
+	admin.PATCH("/halls/packages/:id", middleware.RequireRoles(models.RoleSuperAdmin, models.RoleAdmin), adminHallCtl.UpdatePackage)
+	admin.DELETE("/halls/packages/:id", middleware.RequireRoles(models.RoleSuperAdmin, models.RoleAdmin), adminHallCtl.DeletePackage)
+	admin.GET("/halls/enquiries", adminHallCtl.ListEnquiries)
+	admin.PATCH("/halls/enquiries/:id/status", adminHallCtl.UpdateEnquiryStatus)
+
+	// SEO
+	admin.GET("/seo", adminSeoCtl.List)
+	admin.POST("/seo", middleware.RequireRoles(models.RoleSuperAdmin, models.RoleAdmin), adminSeoCtl.Save)
+
+	// Offers
+	admin.GET("/offers", adminOfferCtl.List)
+	admin.POST("/offers", middleware.RequireRoles(models.RoleSuperAdmin, models.RoleAdmin), adminOfferCtl.Create)
+	admin.PATCH("/offers/:id", middleware.RequireRoles(models.RoleSuperAdmin, models.RoleAdmin), adminOfferCtl.Update)
+	admin.DELETE("/offers/:id", middleware.RequireRoles(models.RoleSuperAdmin, models.RoleAdmin), adminOfferCtl.Delete)
 }

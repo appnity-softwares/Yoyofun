@@ -38,10 +38,10 @@ type HeroSlideInput struct {
 func (s *HeroSlideService) Create(ctx context.Context, input HeroSlideInput, adminID *uuid.UUID) (*models.HeroSlide, error) {
 	slide := &models.HeroSlide{
 		ImageURL:    input.ImageURL,
-		Headline:    input.Headline,
-		Subheadline: input.Subheadline,
-		CTAUrl:      input.CTAUrl,
-		CTAText:     input.CTAText,
+		Title:       input.Headline,
+		Subtitle:    input.Subheadline,
+		CTAURL:      input.CTAUrl,
+		CTALabel:    input.CTAText,
 		IsActive:    input.IsActive,
 		SortOrder:   input.SortOrder,
 	}
@@ -52,7 +52,7 @@ func (s *HeroSlideService) Create(ctx context.Context, input HeroSlideInput, adm
 
 	s.audit.Log(ctx, adminID, "create", "hero_slides", map[string]interface{}{
 		"slide_id": slide.ID,
-		"headline": slide.Headline,
+		"title":    slide.Title,
 	}, "")
 
 	return slide, nil
@@ -65,10 +65,10 @@ func (s *HeroSlideService) Update(ctx context.Context, id uuid.UUID, input HeroS
 	}
 
 	slide.ImageURL = input.ImageURL
-	slide.Headline = input.Headline
-	slide.Subheadline = input.Subheadline
-	slide.CTAUrl = input.CTAUrl
-	slide.CTAText = input.CTAText
+	slide.Title = input.Headline
+	slide.Subtitle = input.Subheadline
+	slide.CTAURL = input.CTAUrl
+	slide.CTALabel = input.CTAText
 	slide.IsActive = input.IsActive
 	slide.SortOrder = input.SortOrder
 
@@ -78,7 +78,7 @@ func (s *HeroSlideService) Update(ctx context.Context, id uuid.UUID, input HeroS
 
 	s.audit.Log(ctx, adminID, "update", "hero_slides", map[string]interface{}{
 		"slide_id": slide.ID,
-		"headline": slide.Headline,
+		"title":    slide.Title,
 	}, "")
 
 	return slide, nil
@@ -96,7 +96,7 @@ func (s *HeroSlideService) Delete(ctx context.Context, id uuid.UUID, adminID *uu
 
 	s.audit.Log(ctx, adminID, "delete", "hero_slides", map[string]interface{}{
 		"slide_id": id,
-		"headline": slide.Headline,
+		"title":    slide.Title,
 	}, "")
 
 	return nil

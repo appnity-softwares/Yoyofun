@@ -39,17 +39,21 @@ func Forbidden(c *gin.Context, message string) {
 	Error(c, http.StatusForbidden, message, nil)
 }
 
-func NotFound(c *gin.Context, message string) {
-	Error(c, http.StatusNotFound, message, nil)
+func NotFound(c *gin.Context, message string, errors interface{}) {
+	Error(c, http.StatusNotFound, message, errors)
 }
 
 func ServerError(c *gin.Context) {
 	Error(c, http.StatusInternalServerError, "Something went wrong. Please try again.", nil)
 }
 
+func InternalError(c *gin.Context, message string, errors interface{}) {
+	Error(c, http.StatusInternalServerError, message, errors)
+}
+
 func DBError(c *gin.Context, err error, notFoundMessage string) {
 	if errors.Is(err, gorm.ErrRecordNotFound) {
-		NotFound(c, notFoundMessage)
+		NotFound(c, notFoundMessage, nil)
 		return
 	}
 	ServerError(c)
