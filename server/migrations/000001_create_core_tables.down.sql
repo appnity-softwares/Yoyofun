@@ -1,3 +1,13 @@
+DROP TABLE IF EXISTS offers;
+DROP TABLE IF EXISTS hall_enquiries;
+DROP TABLE IF EXISTS hall_packages;
+DROP TABLE IF EXISTS suite_rooms;
+DROP TABLE IF EXISTS restaurant_items;
+DROP TABLE IF EXISTS gallery_items;
+DROP TABLE IF EXISTS seo_pages;
+DROP TABLE IF EXISTS media_assets;
+DROP TABLE IF EXISTS content_pages;
+DROP TABLE IF EXISTS hero_slides;
 DROP TABLE IF EXISTS audit_logs;
 DROP TABLE IF EXISTS site_settings;
 DROP TABLE IF EXISTS contact_messages;

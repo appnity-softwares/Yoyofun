@@ -71,13 +71,17 @@ CREATE TABLE IF NOT EXISTS site_settings (
     logo_url TEXT,
     contact_email VARCHAR(180),
     phone_numbers JSONB NOT NULL DEFAULT '[]'::jsonb,
+    whatsapp_number VARCHAR(20),
     address TEXT,
+    google_maps_url TEXT,
+    opening_hours TEXT,
     social_links JSONB NOT NULL DEFAULT '{}'::jsonb,
-    seo_title VARCHAR(180),
-    seo_description TEXT,
+    meta_title VARCHAR(180),
+    meta_description TEXT,
     razorpay_enabled BOOLEAN NOT NULL DEFAULT TRUE,
     maintenance_mode BOOLEAN NOT NULL DEFAULT FALSE,
     feature_toggles JSONB NOT NULL DEFAULT '{}'::jsonb,
+    homepage_sections JSONB NOT NULL DEFAULT '{}'::jsonb,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
@@ -92,6 +96,163 @@ CREATE TABLE IF NOT EXISTS audit_logs (
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
+CREATE TABLE IF NOT EXISTS hero_slides (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    title VARCHAR(255),
+    subtitle VARCHAR(255),
+    description TEXT,
+    image_url TEXT NOT NULL,
+    mobile_image_url TEXT,
+    cta_label VARCHAR(100),
+    cta_url VARCHAR(255),
+    secondary_cta_label VARCHAR(100),
+    secondary_cta_url VARCHAR(255),
+    badge_text VARCHAR(100),
+    sort_order INTEGER NOT NULL DEFAULT 0,
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    deleted_at TIMESTAMPTZ
+);
+
+CREATE TABLE IF NOT EXISTS content_pages (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    slug VARCHAR(180) NOT NULL UNIQUE,
+    title VARCHAR(255) NOT NULL,
+    content TEXT,
+    meta_title VARCHAR(255),
+    meta_description TEXT,
+    is_published BOOLEAN NOT NULL DEFAULT TRUE,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    deleted_at TIMESTAMPTZ
+);
+
+CREATE TABLE IF NOT EXISTS media_assets (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    url TEXT NOT NULL,
+    storage_key VARCHAR(255) NOT NULL,
+    filename VARCHAR(255) NOT NULL,
+    original_filename VARCHAR(255),
+    mime_type VARCHAR(100) NOT NULL,
+    size_bytes BIGINT NOT NULL,
+    storage_provider VARCHAR(50) NOT NULL,
+    uploaded_by_id UUID NOT NULL REFERENCES admin_users(id) ON UPDATE CASCADE ON DELETE RESTRICT,
+    alt_text VARCHAR(255),
+    folder VARCHAR(100),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    deleted_at TIMESTAMPTZ
+);
+
+CREATE TABLE IF NOT EXISTS seo_pages (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    page_slug VARCHAR(180) NOT NULL UNIQUE,
+    meta_title VARCHAR(255),
+    meta_description TEXT,
+    canonical_url TEXT,
+    og_title VARCHAR(255),
+    og_description TEXT,
+    og_image TEXT,
+    robots_index BOOLEAN NOT NULL DEFAULT TRUE,
+    robots_follow BOOLEAN NOT NULL DEFAULT TRUE,
+    schema_json JSONB NOT NULL DEFAULT '{}'::jsonb,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS gallery_items (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    title VARCHAR(255),
+    description TEXT,
+    image_url TEXT NOT NULL,
+    category VARCHAR(100),
+    alt_text VARCHAR(255),
+    sort_order INTEGER NOT NULL DEFAULT 0,
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    deleted_at TIMESTAMPTZ
+);
+
+CREATE TABLE IF NOT EXISTS restaurant_items (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    image_url TEXT,
+    category VARCHAR(100),
+    price BIGINT,
+    is_featured BOOLEAN NOT NULL DEFAULT FALSE,
+    sort_order INTEGER NOT NULL DEFAULT 0,
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    deleted_at TIMESTAMPTZ
+);
+
+CREATE TABLE IF NOT EXISTS suite_rooms (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    title VARCHAR(255) NOT NULL,
+    slug VARCHAR(255) NOT NULL UNIQUE,
+    description TEXT,
+    image_url TEXT NOT NULL,
+    gallery JSONB NOT NULL DEFAULT '[]'::jsonb,
+    price_per_night BIGINT NOT NULL,
+    max_guests INTEGER NOT NULL DEFAULT 2,
+    amenities JSONB NOT NULL DEFAULT '[]'::jsonb,
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    sort_order INTEGER NOT NULL DEFAULT 0,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    deleted_at TIMESTAMPTZ
+);
+
+CREATE TABLE IF NOT EXISTS hall_packages (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    image_url TEXT NOT NULL,
+    capacity INTEGER,
+    starting_price BIGINT,
+    suitable_for JSONB NOT NULL DEFAULT '[]'::jsonb,
+    features JSONB NOT NULL DEFAULT '[]'::jsonb,
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    sort_order INTEGER NOT NULL DEFAULT 0,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    deleted_at TIMESTAMPTZ
+);
+
+CREATE TABLE IF NOT EXISTS hall_enquiries (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    name VARCHAR(255) NOT NULL,
+    phone VARCHAR(30) NOT NULL,
+    email VARCHAR(255),
+    event_type VARCHAR(100),
+    expected_guests INTEGER,
+    preferred_date DATE,
+    message TEXT,
+    status VARCHAR(50) NOT NULL DEFAULT 'new',
+    source VARCHAR(100),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS offers (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    code VARCHAR(50) NOT NULL UNIQUE,
+    discount_type VARCHAR(50) NOT NULL,
+    discount_value BIGINT NOT NULL,
+    starts_at TIMESTAMPTZ,
+    ends_at TIMESTAMPTZ,
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    deleted_at TIMESTAMPTZ
+);
+
+-- Indices
 CREATE INDEX IF NOT EXISTS idx_admin_users_deleted_at ON admin_users(deleted_at);
 CREATE INDEX IF NOT EXISTS idx_tickets_active_sort ON tickets(is_active, sort_order);
 CREATE INDEX IF NOT EXISTS idx_tickets_deleted_at ON tickets(deleted_at);
@@ -103,3 +264,8 @@ CREATE INDEX IF NOT EXISTS idx_contact_messages_status ON contact_messages(statu
 CREATE INDEX IF NOT EXISTS idx_contact_messages_deleted_at ON contact_messages(deleted_at);
 CREATE INDEX IF NOT EXISTS idx_audit_logs_module_action ON audit_logs(module, action);
 CREATE INDEX IF NOT EXISTS idx_audit_logs_admin ON audit_logs(admin_user_id);
+CREATE INDEX IF NOT EXISTS idx_hero_slides_sort ON hero_slides(is_active, sort_order);
+CREATE INDEX IF NOT EXISTS idx_media_assets_storage ON media_assets(storage_key, storage_provider);
+CREATE INDEX IF NOT EXISTS idx_gallery_category ON gallery_items(category, is_active);
+CREATE INDEX IF NOT EXISTS idx_restaurant_category ON restaurant_items(category, is_active);
+CREATE INDEX IF NOT EXISTS idx_hall_enquiries_phone ON hall_enquiries(phone);

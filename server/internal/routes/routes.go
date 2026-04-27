@@ -163,7 +163,11 @@ func Setup(router *gin.Engine, cfg *config.Config, db *gorm.DB, repos *repositor
 
 	// SEO
 	admin.GET("/seo", adminSeoCtl.List)
+	admin.GET("/seo/:id", adminSeoCtl.GetByID)
+	admin.GET("/seo/slug/:slug", adminSeoCtl.GetBySlug)
 	admin.POST("/seo", middleware.RequireRoles(models.RoleSuperAdmin, models.RoleAdmin), adminSeoCtl.Save)
+	admin.PATCH("/seo/:id", middleware.RequireRoles(models.RoleSuperAdmin, models.RoleAdmin), adminSeoCtl.Save)
+	admin.DELETE("/seo/:id", middleware.RequireRoles(models.RoleSuperAdmin, models.RoleAdmin), adminSeoCtl.Delete)
 
 	// Offers
 	admin.GET("/offers", adminOfferCtl.List)

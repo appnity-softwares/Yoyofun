@@ -530,6 +530,16 @@ func (r *SEORepository) List(ctx context.Context) ([]models.SEOPage, error) {
 	return pages, err
 }
 
+func (r *SEORepository) FindByID(ctx context.Context, id uuid.UUID) (*models.SEOPage, error) {
+	var page models.SEOPage
+	err := r.db.WithContext(ctx).First(&page, "id = ?", id).Error
+	return &page, err
+}
+
+func (r *SEORepository) Delete(ctx context.Context, page *models.SEOPage) error {
+	return r.db.WithContext(ctx).Delete(page).Error
+}
+
 // GalleryRepository
 type GalleryRepository struct {
 	db *gorm.DB

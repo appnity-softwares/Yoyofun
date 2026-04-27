@@ -62,3 +62,19 @@ func (s *SEOService) Save(ctx context.Context, input SEOInput, adminID uuid.UUID
 	s.audit.Log(ctx, &adminID, "seo.update", "seo", map[string]interface{}{"slug": page.PageSlug}, ip)
 	return page, nil
 }
+
+func (s *SEOService) GetByID(ctx context.Context, id uuid.UUID) (*models.SEOPage, error) {
+	return s.repo.FindByID(ctx, id)
+}
+
+func (s *SEOService) Delete(ctx context.Context, id uuid.UUID, adminID uuid.UUID, ip string) error {
+	page, err := s.repo.FindByID(ctx, id)
+	if err != nil {
+		return err
+	}
+	if err := s.repo.Delete(ctx, page); err != nil {
+		return err
+	}
+	s.audit.Log(ctx, &adminID, "seo.delete", "seo", map[string]interface{}{"slug": page.PageSlug}, ip)
+	return nil
+}

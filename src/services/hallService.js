@@ -47,7 +47,7 @@ export const hallService = {
   },
 
   updateEnquiry(id, data) {
-    return apiRequest(`/admin/halls/enquiries/${id}`, {
+    return apiRequest(`/admin/halls/enquiries/${id}/status`, {
       method: "PATCH",
       auth: true,
       body: data,

@@ -12,6 +12,7 @@ import (
 
 type Config struct {
 	AppEnv                  string
+	Host                    string
 	Port                    string
 	DatabaseURL             string
 	DBHost                  string
@@ -54,6 +55,7 @@ func Load() (*Config, error) {
 
 	cfg := &Config{
 		AppEnv:                  getEnv("APP_ENV", "development"),
+		Host:                    getEnv("HOST", "0.0.0.0"),
 		Port:                    getEnv("PORT", "8080"),
 		DatabaseURL:             os.Getenv("DATABASE_URL"),
 		DBHost:                  getEnv("DB_HOST", "localhost"),

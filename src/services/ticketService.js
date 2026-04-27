@@ -53,8 +53,8 @@ export const ticketService = {
   },
 
   async toggleStatus(id) {
-    return apiRequest(`/admin/tickets/${id}/toggle`, {
-      method: "POST",
+    return apiRequest(`/admin/tickets/${id}/toggle-status`, {
+      method: "PATCH",
       auth: true,
     });
   },

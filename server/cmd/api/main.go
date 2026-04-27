@@ -52,8 +52,8 @@ func main() {
 	}
 	routes.Setup(router, cfg, db, repos, svc)
 
-	log.Printf("YOYO API listening on :%s", cfg.Port)
-	if err := router.Run(":" + cfg.Port); err != nil {
+	log.Printf("YOYO API listening on %s:%s", cfg.Host, cfg.Port)
+	if err := router.Run(cfg.Host + ":" + cfg.Port); err != nil {
 		log.Fatal(err)
 	}
 }
