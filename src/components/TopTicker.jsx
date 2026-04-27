@@ -9,8 +9,8 @@ const TopTicker = () => {
     "👨‍👩‍👧‍👦 Family Pack: 2 Adults + 2 Kids only at ₹1799!",
   ];
 
-  // Triple the items for a seamless infinite scroll
-  const items = [...offers, ...offers, ...offers];
+  // Double the items for a perfectly seamless infinite scroll with -50% keyframe
+  const items = [...offers, ...offers];
 
   return (
     <div className="relative w-full bg-blue-600 text-white overflow-hidden py-2">

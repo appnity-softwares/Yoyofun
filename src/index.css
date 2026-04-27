@@ -126,9 +126,9 @@ html.lenis, html.lenis body {
 
 @keyframes infinite-scroll {
   from { transform: translateX(0); }
-  to { transform: translateX(calc(-100% / 3)); }
+  to { transform: translateX(-50%); }
 }
 
 .animate-infinite-scroll {
-  animation: infinite-scroll 40s linear infinite;
+  animation: infinite-scroll 6s linear infinite;
 }

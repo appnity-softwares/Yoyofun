@@ -87,24 +87,33 @@ export default function Hero() {
               </div>
             </div>
 
-            <h1 className="[font-family:'Outfit',sans-serif] font-black tracking-tight leading-[1.1] text-5xl md:text-7xl lg:text-8xl mb-8 drop-shadow-2xl animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-200">
-              {slides[index].headline.split(' ').map((word, i) => (
-                <span key={i} className={i > 4 ? "text-blue-400" : ""}>{word} </span>
-              ))}
+            <h1 className="[font-family:'Outfit',sans-serif] font-black tracking-tighter leading-[1] text-4xl md:text-7xl lg:text-8xl mb-8 drop-shadow-2xl animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-200">
+              {slides[index].headline.split(' ').map((word, i) => {
+                const isThrilling = word.toLowerCase().includes('thrilling');
+                const isWaterpark = word.toLowerCase().includes('waterpark');
+                return (
+                  <span 
+                    key={i} 
+                    className={isThrilling || isWaterpark ? "text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300" : "text-white"}
+                  >
+                    {word}{' '}
+                  </span>
+                );
+              })}
             </h1>
 
-            <p className="mx-auto mb-12 max-w-3xl text-lg md:text-2xl text-white/80 font-medium leading-relaxed opacity-90 animate-in fade-in slide-in-from-bottom-10 duration-1000 delay-500">
+            <p className="mx-auto mb-10 max-w-2xl text-base md:text-xl lg:text-2xl text-white/90 font-medium leading-relaxed opacity-90 animate-in fade-in slide-in-from-bottom-10 duration-1000 delay-500 px-4">
               {slides[index].subheadline}
             </p>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-6 animate-in fade-in slide-in-from-bottom-12 duration-1000 delay-700">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 md:gap-6 px-6 animate-in fade-in slide-in-from-bottom-12 duration-1000 delay-700">
               <Link
                 to={slides[index].cta_url || "/tickets"}
-                className="group relative w-full sm:w-auto rounded-2xl bg-blue-600 px-12 py-5 text-sm font-black tracking-widest uppercase transition-all hover:bg-blue-700 hover:-translate-y-1 shadow-2xl shadow-blue-600/40 overflow-hidden"
+                className="group relative w-full sm:w-auto rounded-2xl bg-blue-600 px-10 py-5 text-[11px] font-black tracking-[0.2em] uppercase transition-all hover:bg-blue-700 hover:-translate-y-1 shadow-[0_20px_50px_rgba(37,99,235,0.4)] overflow-hidden"
               >
-                <span className="relative z-10 flex items-center justify-center gap-2">
+                <span className="relative z-10 flex items-center justify-center gap-3">
                   {slides[index].cta_text || "Book Tickets Now"}
-                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1.5" />
                 </span>
                 {/* Shimmer Effect */}
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]" />
@@ -112,7 +121,7 @@ export default function Hero() {
               
               <Link
                 to="/gallery"
-                className="w-full sm:w-auto rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 px-12 py-5 text-sm font-black tracking-widest uppercase transition-all hover:bg-white/10 hover:-translate-y-1"
+                className="w-full sm:w-auto rounded-2xl bg-white/5 backdrop-blur-2xl border border-white/20 px-10 py-5 text-[11px] font-black tracking-[0.2em] uppercase text-white transition-all hover:bg-white/10 hover:-translate-y-1 hover:border-white/30"
               >
                 Explore Attractions
               </Link>
@@ -138,36 +147,77 @@ export default function Hero() {
       </div>
 
       {/* QUICK INFO BAR - 100vh Visibility Optimization */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 w-full max-w-6xl px-6 z-40">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-1 rounded-[2.5rem] overflow-hidden shadow-[0_32px_64px_-15px_rgba(0,0,0,0.3)] border border-white/20 bg-white/70 backdrop-blur-3xl">
-          <div className="flex items-center gap-5 p-8 bg-transparent hover:bg-white/40 transition-all group">
-            <div className="w-14 h-14 rounded-2xl bg-blue-600/10 flex items-center justify-center text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-all duration-500">
+      <div className="absolute -bottom-8 md:bottom-6 left-1/2 -translate-x-1/2 w-full max-w-6xl px-4 md:px-6 z-40">
+        {/* Desktop Grid Layout */}
+        <div className="hidden md:grid md:grid-cols-3 gap-px rounded-[2.5rem] overflow-hidden shadow-[0_32px_64px_-15px_rgba(0,0,0,0.4)] border border-white/20 bg-white/10 backdrop-blur-3xl">
+          <div className="flex items-center gap-4 p-8 bg-transparent hover:bg-white/10 transition-all group">
+            <div className="w-14 h-14 rounded-2xl bg-blue-500/20 flex items-center justify-center text-blue-400 group-hover:bg-blue-600 group-hover:text-white transition-all duration-500">
               <Ticket size={28} className="transition-transform group-hover:rotate-12" />
             </div>
             <div>
-              <p className="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-1">Starts From</p>
-              <p className="text-2xl font-black text-slate-900 leading-none">₹499 <span className="text-sm font-medium text-slate-500">/ Person</span></p>
+              <p className="text-[10px] font-black text-blue-400 uppercase tracking-[0.2em] mb-1">Starts From</p>
+              <p className="text-2xl font-black text-white leading-none">₹499 <span className="text-sm font-medium text-white/50">/ Person</span></p>
             </div>
           </div>
           
-          <div className="flex items-center gap-5 p-8 bg-transparent hover:bg-white/40 transition-all group border-y md:border-y-0 md:border-x border-slate-200/50">
-            <div className="w-14 h-14 rounded-2xl bg-orange-600/10 flex items-center justify-center text-orange-600 group-hover:bg-orange-600 group-hover:text-white transition-all duration-500">
+          <div className="flex items-center gap-4 p-8 bg-transparent hover:bg-white/10 transition-all group border-x border-white/10">
+            <div className="w-14 h-14 rounded-2xl bg-orange-500/20 flex items-center justify-center text-orange-400 group-hover:bg-orange-600 group-hover:text-white transition-all duration-500">
               <MapPin size={28} className="transition-transform group-hover:bounce" />
             </div>
             <div>
-              <p className="text-[10px] font-black text-orange-600 uppercase tracking-widest mb-1">Location</p>
-              <p className="text-2xl font-black text-slate-900 leading-none">Indore <span className="text-sm font-medium text-slate-500">Bypass</span></p>
+              <p className="text-[10px] font-black text-orange-400 uppercase tracking-[0.2em] mb-1">Location</p>
+              <p className="text-2xl font-black text-white leading-none">Indore <span className="text-sm font-medium text-white/50">Bypass</span></p>
             </div>
           </div>
 
-          <div className="flex items-center gap-5 p-8 bg-transparent hover:bg-white/40 transition-all group">
-            <div className="w-14 h-14 rounded-2xl bg-emerald-600/10 flex items-center justify-center text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white transition-all duration-500">
+          <div className="flex items-center gap-4 p-8 bg-transparent hover:bg-white/10 transition-all group">
+            <div className="w-14 h-14 rounded-2xl bg-emerald-500/20 flex items-center justify-center text-emerald-400 group-hover:bg-emerald-600 group-hover:text-white transition-all duration-500">
               <Clock size={28} className="transition-transform group-hover:scale-110" />
             </div>
             <div>
-              <p className="text-[10px] font-black text-emerald-600 uppercase tracking-widest mb-1">Status</p>
-              <p className="text-2xl font-black text-slate-900 leading-none">Open <span className="text-sm font-medium text-slate-500">10:00 - 18:00</span></p>
+              <p className="text-[10px] font-black text-emerald-400 uppercase tracking-[0.2em] mb-1">Status</p>
+              <p className="text-2xl font-black text-white leading-none">Open <span className="text-sm font-medium text-white/50">10:00 - 18:00</span></p>
             </div>
+          </div>
+        </div>
+
+        {/* Mobile Infinite Scroll Layout */}
+        <div className="md:hidden w-full overflow-hidden rounded-[2rem] border border-white/20 bg-white/10 backdrop-blur-3xl shadow-[0_32px_64px_-15px_rgba(0,0,0,0.4)]">
+          <div className="flex animate-infinite-scroll py-4 no-scrollbar">
+            {/* Double the list for seamless loop */}
+            {[...Array(2)].map((_, groupIndex) => (
+              <div key={groupIndex} className="flex gap-4 px-2">
+                <div className="flex-shrink-0 w-[260px] flex items-center gap-4 p-5 bg-white/5 rounded-2xl border border-white/5 shadow-inner">
+                  <div className="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center text-blue-400">
+                    <Ticket size={22} />
+                  </div>
+                  <div>
+                    <p className="text-[9px] font-black text-blue-400 uppercase tracking-widest mb-0.5">Price</p>
+                    <p className="text-xl font-black text-white leading-none">₹499 <span className="text-[11px] font-medium text-white/50">/ Person</span></p>
+                  </div>
+                </div>
+
+                <div className="flex-shrink-0 w-[260px] flex items-center gap-4 p-5 bg-white/5 rounded-2xl border border-white/5 shadow-inner">
+                  <div className="w-12 h-12 rounded-xl bg-orange-500/20 flex items-center justify-center text-orange-400">
+                    <MapPin size={22} />
+                  </div>
+                  <div>
+                    <p className="text-[9px] font-black text-orange-400 uppercase tracking-widest mb-0.5">Location</p>
+                    <p className="text-xl font-black text-white leading-none">Indore <span className="text-[11px] font-medium text-white/50">Bypass</span></p>
+                  </div>
+                </div>
+
+                <div className="flex-shrink-0 w-[260px] flex items-center gap-4 p-5 bg-white/5 rounded-2xl border border-white/5 shadow-inner">
+                  <div className="w-12 h-12 rounded-xl bg-emerald-500/20 flex items-center justify-center text-emerald-400">
+                    <Clock size={22} />
+                  </div>
+                  <div>
+                    <p className="text-[9px] font-black text-emerald-400 uppercase tracking-widest mb-0.5">Status</p>
+                    <p className="text-xl font-black text-white leading-none">Open <span className="text-[11px] font-medium text-white/50">10:00 - 18:00</span></p>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>

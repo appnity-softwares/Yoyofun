@@ -49,12 +49,7 @@ function AppShell() {
   return (
     <>
       <ScrollToTop />
-      {!isAdminRoute && (
-        <div className="fixed top-0 left-0 right-0 z-50">
-          <TopTicker />
-          <Navbar />
-        </div>
-      )}
+      {!isAdminRoute && <Navbar />}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/tickets" element={<Tickets />} />
