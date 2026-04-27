@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import { Menu, X, Phone, ChevronDown } from "lucide-react";
 import logo from "../assets/logo.png";
 
@@ -7,6 +7,8 @@ export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const location = useLocation();
+  const isHomePage = location.pathname === "/";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -22,10 +24,13 @@ export default function Navbar() {
     { name: "Hall Booking", path: "/#hall-booking" },
   ];
 
+  // Logic to determine if we should show the "solid" version of the navbar
+  const showSolidNavbar = isScrolled || !isHomePage;
+
   return (
     <header
-      className={`w-full transition-all duration-500 ${
-        isScrolled 
+      className={`fixed top-0 left-0 right-0 z-50 w-full transition-all duration-500 ${
+        showSolidNavbar 
           ? "bg-white/80 backdrop-blur-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] py-3" 
           : "bg-transparent py-6"
       }`}
@@ -41,14 +46,14 @@ export default function Navbar() {
             />
           </div>
           <div className="flex flex-col leading-none">
-            <span className={`text-2xl font-black tracking-tighter transition-colors duration-500 ${isScrolled ? "text-blue-600" : "text-white"}`}>YOYO</span>
-            <span className={`text-[10px] font-bold uppercase tracking-[0.25em] transition-colors duration-500 ${isScrolled ? "text-slate-400" : "text-white/60"}`}>Fun 'N' Foods</span>
+            <span className={`text-2xl font-black tracking-tighter transition-colors duration-500 ${showSolidNavbar ? "text-blue-600" : "text-white"}`}>YOYO</span>
+            <span className={`text-[10px] font-bold uppercase tracking-[0.25em] transition-colors duration-500 ${showSolidNavbar ? "text-slate-400" : "text-white/60"}`}>Fun 'N' Foods</span>
           </div>
         </Link>
 
         {/* Center: Navigation */}
         <nav className="hidden md:flex items-center gap-10 text-[11px] font-black uppercase tracking-[0.15em]">
-          <NavLink to="/" className={({ isActive }) => `relative transition-all duration-300 hover:text-blue-500 ${isActive ? "text-blue-600" : (isScrolled ? "text-slate-700" : "text-white/90")} group`}>
+          <NavLink to="/" className={({ isActive }) => `relative transition-all duration-300 hover:text-blue-500 ${isActive ? "text-blue-600" : (showSolidNavbar ? "text-slate-700" : "text-white/90")} group`}>
             {({ isActive }) => (
               <>
                 Home
@@ -57,7 +62,7 @@ export default function Navbar() {
             )}
           </NavLink>
           
-          <NavLink to="/gallery" className={({ isActive }) => `relative transition-all duration-300 hover:text-blue-500 ${isActive ? "text-blue-600" : (isScrolled ? "text-slate-700" : "text-white/90")} group`}>
+          <NavLink to="/gallery" className={({ isActive }) => `relative transition-all duration-300 hover:text-blue-500 ${isActive ? "text-blue-600" : (showSolidNavbar ? "text-slate-700" : "text-white/90")} group`}>
             {({ isActive }) => (
               <>
                 Attractions
@@ -72,7 +77,7 @@ export default function Navbar() {
             onMouseEnter={() => setIsDropdownOpen(true)}
             onMouseLeave={() => setIsDropdownOpen(false)}
           >
-            <button className={`flex items-center gap-1.5 transition-all duration-300 hover:text-blue-500 ${isScrolled ? "text-slate-700" : "text-white/90"}`}>
+            <button className={`flex items-center gap-1.5 transition-all duration-300 hover:text-blue-500 ${showSolidNavbar ? "text-slate-700" : "text-white/90"}`}>
               Resort <ChevronDown size={14} className={`transition-transform duration-500 ${isDropdownOpen ? 'rotate-180' : ''}`} />
             </button>
             
@@ -90,7 +95,7 @@ export default function Navbar() {
             </div>
           </div>
 
-          <NavLink to="/tickets" className={({ isActive }) => `relative transition-all duration-300 hover:text-blue-500 ${isActive ? "text-blue-600" : (isScrolled ? "text-slate-700" : "text-white/90")} group`}>
+          <NavLink to="/tickets" className={({ isActive }) => `relative transition-all duration-300 hover:text-blue-500 ${isActive ? "text-blue-600" : (showSolidNavbar ? "text-slate-700" : "text-white/90")} group`}>
             {({ isActive }) => (
               <>
                 Pricing
@@ -99,7 +104,7 @@ export default function Navbar() {
             )}
           </NavLink>
 
-          <NavLink to="/contact" className={({ isActive }) => `relative transition-all duration-300 hover:text-blue-500 ${isActive ? "text-blue-600" : (isScrolled ? "text-slate-700" : "text-white/90")} group`}>
+          <NavLink to="/contact" className={({ isActive }) => `relative transition-all duration-300 hover:text-blue-500 ${isActive ? "text-blue-600" : (showSolidNavbar ? "text-slate-700" : "text-white/90")} group`}>
             {({ isActive }) => (
               <>
                 Contact
@@ -113,7 +118,7 @@ export default function Navbar() {
         <div className="flex items-center gap-6">
           <a
             href="tel:+919752586956"
-            className={`hidden lg:flex items-center justify-center w-11 h-11 rounded-2xl transition-all duration-500 ${isScrolled ? "bg-slate-100 text-slate-600 hover:bg-blue-600 hover:text-white" : "bg-white/10 text-white hover:bg-white hover:text-blue-600 border border-white/10"}`}
+            className={`hidden lg:flex items-center justify-center w-11 h-11 rounded-2xl transition-all duration-500 ${showSolidNavbar ? "bg-slate-100 text-slate-600 hover:bg-blue-600 hover:text-white" : "bg-white/10 text-white hover:bg-white hover:text-blue-600 border border-white/10"}`}
             title="Call Us"
           >
             <Phone size={18} />
@@ -130,7 +135,7 @@ export default function Navbar() {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className={`md:hidden p-2 transition-colors duration-500 ${isScrolled || isMenuOpen ? "text-slate-900" : "text-white"}`}
+            className={`md:hidden p-2 transition-colors duration-500 ${showSolidNavbar || isMenuOpen ? "text-slate-900" : "text-white"}`}
           >
             {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
           </button>
