@@ -60,10 +60,12 @@ export default function DiscoverSection() {
   }, []);
 
   return (
-    <section
-      ref={sectionRef}
-      className="relative bg-[#F3FAE8] py-28 overflow-hidden"
-    >
+ <section
+  id="about"
+  ref={sectionRef}
+  className="relative bg-[#F3FAE8] py-28 overflow-hidden scroll-mt-32"
+>
+
       {/* Floating circles */}
       <img
         src="https://images.unsplash.com/photo-1705829512772-e0ba43a72dd9?q=80&w=1331&auto=format&fit=crop"

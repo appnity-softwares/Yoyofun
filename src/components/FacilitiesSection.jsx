@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 
@@ -54,54 +55,54 @@ export default function FacilitiesSection() {
   return (
     <section
       ref={sectionRef}
-      className="relative py-28 overflow-hidden bg-gradient-to-br from-[#0F3D6E] via-[#1E5FA8] to-[#3FA9F5]"
+      className="relative py-28 overflow-hidden bg-gradient-to-br from-[#0a0f1d] via-[#1e4ed8] to-[#2563eb]"
     >
       <div className="mx-auto max-w-7xl px-6">
         {/* TOP GRID */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          
+
           {/* LEFT */}
           <div className="fac-left">
-            <span className="inline-block mb-4 rounded-md bg-lime-300 px-4 py-1 text-xs font-bold uppercase text-green-900">
+            <span className="inline-block mb-4 rounded-md bg-blue-400/20 border border-blue-400/30 px-4 py-1 text-xs font-bold uppercase text-white tracking-widest">
               Facilities
             </span>
 
             <h2 className="font-heading text-[2.8rem] leading-tight font-extrabold text-white md:text-[3.4rem]">
               Discover the Spaces <br />
-              That Make Camp Special
+              That Make YOYO Special
             </h2>
 
-            <p className="mt-6 max-w-md text-white/90 text-sm md:text-base">
-              From waterfronts to cozy cabins and lively activity hubs, our camp
+            <p className="mt-6 max-w-md text-white/90 text-sm md:text-base font-medium">
+              From waterfronts to cozy cabins and lively activity hubs, our park
               ensures excitement and well-being around every corner.
             </p>
           </div>
 
-          {/* RIGHT – FRAMER STYLE PHOTO COLLAGE */}
+          {/* RIGHT – PHOTO COLLAGE */}
           <div className="relative hidden lg:flex justify-center items-center h-[420px]">
             <div className="relative w-[520px] h-[320px]">
 
               <img
                 src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=600&auto=format&fit=crop"
-                className="collage-img left-0 top-20 rotate-[-8deg]"
+                className="collage-img left-0 top-20 rotate-[-8deg] shadow-2xl"
                 alt=""
               />
 
               <img
                 src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?q=80&w=600&auto=format&fit=crop"
-                className="collage-img left-28 top-0 rotate-[6deg]"
+                className="collage-img left-28 top-0 rotate-[6deg] shadow-2xl"
                 alt=""
               />
 
               <img
                 src="https://images.unsplash.com/photo-1500534623283-312aade485b7?q=80&w=600&auto=format&fit=crop"
-                className="collage-img left-56 top-20 rotate-[-4deg]"
+                className="collage-img left-56 top-20 rotate-[-4deg] shadow-2xl"
                 alt=""
               />
 
               <img
                 src="https://images.unsplash.com/photo-1500534623283-312aade485b7?q=80&w=600&auto=format&fit=crop"
-                className="collage-img left-80 top-6 rotate-[8deg]"
+                className="collage-img left-80 top-6 rotate-[8deg] shadow-2xl"
                 alt=""
               />
 
@@ -113,11 +114,11 @@ export default function FacilitiesSection() {
         <div className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-8">
           {[
             {
-              title: "Private Lakes",
+              title: "Water Adventure",
               img: "https://images.unsplash.com/photo-1707575561373-d868bc04d593?q=80&w=687&auto=format&fit=crop",
             },
             {
-              title: "Cozy Cabins",
+              title: "Relaxation Hubs",
               img: "https://images.unsplash.com/photo-1707575532556-9e4febd8c171?w=500&auto=format&fit=crop&q=60",
             },
             {
@@ -127,15 +128,15 @@ export default function FacilitiesSection() {
           ].map((card, i) => (
             <div
               key={i}
-              className="group relative overflow-hidden rounded-[28px]"
+              className="group relative overflow-hidden rounded-[40px] shadow-2xl shadow-black/10"
             >
               <img
                 src={card.img}
-                className="h-[380px] w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                className="h-[380px] w-full object-cover transition-transform duration-700 group-hover:scale-110"
                 alt=""
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
-              <h4 className="absolute bottom-6 left-6 text-lg font-semibold text-white">
+              <div className="absolute inset-0 bg-gradient-to-t from-gray-950 via-transparent to-transparent opacity-80" />
+              <h4 className="absolute bottom-10 left-10 text-xl font-bold text-white tracking-tight">
                 {card.title}
               </h4>
             </div>
@@ -143,10 +144,13 @@ export default function FacilitiesSection() {
         </div>
 
         {/* CTA */}
-        <div className="mt-20 flex justify-center">
-          <button className="rounded-full bg-orange-500 px-12 py-4 text-sm font-semibold text-white hover:bg-orange-400 transition">
-            Register Now
-          </button>
+        <div className="mt-24 flex justify-center">
+          <Link
+            to="/tickets"
+            className="rounded-full bg-white px-12 py-5 text-sm font-black text-blue-600 hover:bg-gray-100 hover:scale-110 transition-all shadow-2xl active:scale-95 uppercase tracking-widest"
+          >
+            Book Tickets Now
+          </Link>
         </div>
       </div>
     </section>

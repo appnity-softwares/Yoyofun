@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 
@@ -67,15 +68,14 @@ export default function Hero() {
       {slides.map((slide, i) => (
         <div
           key={i}
-          className={`absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ease-in-out ${
-            i === index ? "opacity-100" : "opacity-0"
-          }`}
+          className={`absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ease-in-out ${i === index ? "opacity-100" : "opacity-0"
+            }`}
           style={{ backgroundImage: `url(${slide.image})` }}
         />
       ))}
 
       {/* Gradient Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/40 to-black/70" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/40 to-black/80" />
 
       {/* Content */}
       <div className="relative z-10 flex h-full items-end pb-24 md:pb-32">
@@ -95,11 +95,26 @@ export default function Hero() {
           </p>
 
           <div className="mt-8 flex justify-center">
-            <button className="rounded-full bg-orange-500 px-8 py-4 text-sm font-semibold transition hover:bg-orange-600">
-              Register Now →
-            </button>
+            <Link
+              to="/tickets"
+              className="rounded-full bg-blue-600 px-10 py-4 text-sm font-bold tracking-widest uppercase transition-all hover:bg-white hover:text-black hover:scale-110 active:scale-95 shadow-2xl shadow-blue-500/20"
+            >
+              Book Tickets →
+            </Link>
           </div>
         </div>
+      </div>
+
+      {/* Slide Indicators */}
+      <div className="absolute bottom-10 left-1/2 z-20 flex -translate-x-1/2 gap-3">
+        {slides.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => setIndex(i)}
+            className={`h-1.5 rounded-full transition-all duration-300 ${i === index ? "w-10 bg-blue-500" : "w-2 bg-white/50 hover:bg-white"
+              }`}
+          />
+        ))}
       </div>
     </section>
   );

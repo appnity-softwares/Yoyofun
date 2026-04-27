@@ -1,0 +1,6 @@
+DROP TABLE IF EXISTS audit_logs;
+DROP TABLE IF EXISTS site_settings;
+DROP TABLE IF EXISTS contact_messages;
+DROP TABLE IF EXISTS bookings;
+DROP TABLE IF EXISTS tickets;
+DROP TABLE IF EXISTS admin_users;
