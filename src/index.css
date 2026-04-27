@@ -1,7 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@700;800;900&display=swap');
+
 @import "tailwindcss";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 @keyframes fadeSlide {
   from {
     opacity: 0;
@@ -16,6 +19,7 @@
 .animate-fadeSlide {
   animation: fadeSlide 1s ease forwards;
 }
+
 @keyframes scrollReveal {
   from {
     opacity: 0;
@@ -31,6 +35,7 @@
   opacity: 1;
   animation: scrollReveal 0.9s ease forwards;
 }
+
 @keyframes fadeLeft {
   from {
     opacity: 0;
@@ -59,10 +64,29 @@
 
 .animate-right {
   animation: fadeRight 0.9s ease forwards;
+}@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
 }
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.animate-shimmer {
+  animation: shimmer 2s infinite;
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
 body {
-  font-family: 'Nunito Sans', sans-serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  @apply text-slate-900 antialiased bg-gray-50;
 }
+
 .collage-img {
   position: absolute;
   width: 170px;
@@ -79,6 +103,7 @@ body {
   box-shadow: 0 35px 70px rgba(0, 0, 0, 0.35);
   z-index: 20;
 }
+
 html.lenis, html.lenis body {
   height: auto;
 }
@@ -97,4 +122,13 @@ html.lenis, html.lenis body {
 
 .lenis.lenis-scrolling iframe {
   pointer-events: none;
+}
+
+@keyframes infinite-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(calc(-100% / 3)); }
+}
+
+.animate-infinite-scroll {
+  animation: infinite-scroll 40s linear infinite;
 }

@@ -15,10 +15,12 @@ type PublicController struct {
 	bookings *services.BookingService
 	contacts *services.ContactService
 	settings *services.SettingsService
+	hero     *services.HeroSlideService
+	content  *services.ContentService
 }
 
-func NewPublicController(tickets *services.TicketService, bookings *services.BookingService, contacts *services.ContactService, settings *services.SettingsService) *PublicController {
-	return &PublicController{tickets: tickets, bookings: bookings, contacts: contacts, settings: settings}
+func NewPublicController(tickets *services.TicketService, bookings *services.BookingService, contacts *services.ContactService, settings *services.SettingsService, hero *services.HeroSlideService, content *services.ContentService) *PublicController {
+	return &PublicController{tickets: tickets, bookings: bookings, contacts: contacts, settings: settings, hero: hero, content: content}
 }
 
 func (ctl *PublicController) Tickets(c *gin.Context) {
@@ -116,4 +118,22 @@ func (ctl *PublicController) PublicSettings(c *gin.Context) {
 		return
 	}
 	utils.OK(c, "Public settings loaded.", services.PublicSettings(setting))
+}
+
+func (ctl *PublicController) HeroSlides(c *gin.Context) {
+	slides, err := ctl.hero.ListPublic(c.Request.Context())
+	if err != nil {
+		handleServiceError(c, err)
+		return
+	}
+	utils.OK(c, "Hero slides loaded.", slides)
+}
+
+func (ctl *PublicController) GetContent(c *gin.Context) {
+	page, err := ctl.content.FindBySlug(c.Request.Context(), c.Param("slug"))
+	if err != nil {
+		handleServiceError(c, err)
+		return
+	}
+	utils.OK(c, "Content page loaded.", page)
 }

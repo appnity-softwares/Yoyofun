@@ -1,7 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { Check, Mail, Phone, MapPin, Send, MessageCircle } from 'lucide-react';
+import { Check, Mail, Phone, MapPin, Send } from 'lucide-react';
 import { settingsService } from '../services/settingsService';
 import { apiRequest } from '../services/api';
+
+const WhatsAppLogo = ({ size = 20, className = "" }) => (
+  <svg 
+    xmlns="http://www.w3.org/2000/svg" 
+    width={size} 
+    height={size} 
+    viewBox="0 0 24 24" 
+    fill="currentColor"
+    className={className}
+  >
+    <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.588-5.946 0-6.556 5.332-11.891 11.892-11.891 3.181 0 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.481 8.414 0 6.556-5.332 11.892-11.893 11.892-1.99 0-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.591 5.457 0 9.894-4.437 9.894-9.893 0-2.642-1.029-5.125-2.897-6.993-1.868-1.869-4.35-2.898-6.993-2.898-5.457 0-9.894 4.437-9.894 9.894 0 2.235.614 3.911 1.72 5.805l-1.11 4.053 4.223-1.106c1.332.812 2.723 1.293 4.153 1.293h.001zm11.233-1.43c-.242-.12-.141-.429-.484-.6s-2.046-1.006-2.363-1.123-.544-.177-.771.163-.878 1.102-1.077 1.331-.399.256-.812.057c-.413-.199-1.742-.643-3.32-2.051-1.228-1.096-2.058-2.45-2.299-2.863-.242-.413-.026-.637.174-.835.18-.178.413-.485.62-.727.206-.242.275-.413.413-.687.138-.275.069-.515-.034-.727-.104-.212-.878-2.115-1.203-2.898-.316-.762-.642-.659-.878-.671l-.746-.013c-.256 0-.672.096-1.025.485-.353.388-1.345 1.316-1.345 3.208 0 1.893 1.378 3.719 1.572 3.978.194.259 2.712 4.143 6.571 5.806.917.395 1.635.631 2.193.809.921.293 1.76.252 2.423.153.739-.11 2.274-.929 2.593-1.826.319-.896.319-1.662.224-1.826-.095-.164-.351-.263-.593-.383z" />
+  </svg>
+);
 
 function Contact() {
     const [formData, setFormData] = useState({ name: '', email: '', phone: '', subject: '', message: '' });
@@ -100,13 +113,13 @@ function Contact() {
                         </div>
 
                         {/* SOCIAL PROOF / HELP BOX */}
-                        <div className="bg-gray-900 p-10 rounded-[40px] text-white space-y-4">
-                            <MessageCircle className="text-blue-500 mb-2" size={32} />
-                            <h4 className="text-2xl font-black">Live Support?</h4>
-                            <p className="text-gray-400 font-medium leading-relaxed">Need instant answers? Our chat support is available 24/7 during the summer season.</p>
-                            <button className="pt-2 text-blue-400 font-bold flex items-center gap-2 hover:text-blue-300 transition-colors">
-                                Start a chat now <span>→</span>
-                            </button>
+                        <div className="bg-gradient-to-br from-[#25D366] to-[#128C7E] p-10 rounded-[40px] text-white space-y-4 shadow-xl shadow-green-500/20">
+                            <WhatsAppLogo size={32} className="text-white mb-2" />
+                            <h4 className="text-2xl font-black">Get Instant Replies</h4>
+                            <p className="text-green-50 font-medium leading-relaxed">Need instant answers about ticket prices, group bookings, or park timings? We're on WhatsApp!</p>
+                            <a href="https://wa.me/919752586956?text=Hi%20YOYO%2C%20I%20want%20to%20book%20tickets" target="_blank" rel="noopener noreferrer" className="inline-flex mt-4 text-[#25D366] font-black items-center gap-2 hover:scale-105 transition-transform bg-white px-6 py-3 rounded-full w-fit shadow-xl">
+                                Chat on WhatsApp <span>→</span>
+                            </a>
                         </div>
                     </div>
 
@@ -190,7 +203,7 @@ function Contact() {
                                     ) : submitted ? (
                                         <><Check size={24} /> Sent Successfully!</>
                                     ) : (
-                                        <><Send size={20} /> Send Message</>
+                                        <><Send size={20} /> Request Call Back</>
                                     )}
                                 </button>
                             </form>

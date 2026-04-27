@@ -43,6 +43,8 @@ func Connect(cfg *config.Config) (*gorm.DB, error) {
 			&models.ContactMessage{},
 			&models.SiteSetting{},
 			&models.AuditLog{},
+			&models.HeroSlide{},
+			&models.ContentPage{},
 		); err != nil {
 			return nil, err
 		}

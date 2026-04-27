@@ -19,6 +19,8 @@ type AdminController struct {
 	users     *services.AdminUserService
 	audit     *services.AuditService
 	uploads   *services.UploadService
+	hero      *services.HeroSlideService
+	content   *services.ContentService
 }
 
 func NewAdminController(s *services.Services) *AdminController {
@@ -31,6 +33,8 @@ func NewAdminController(s *services.Services) *AdminController {
 		users:     s.Users,
 		audit:     s.Audit,
 		uploads:   s.Uploads,
+		hero:      s.HeroSlides,
+		content:   s.Content,
 	}
 }
 
@@ -357,4 +361,86 @@ func (ctl *AdminController) Upload(c *gin.Context) {
 
 func roleCanManageUsers(role string) bool {
 	return role == string(models.RoleSuperAdmin) || role == string(models.RoleAdmin)
+}
+
+func (ctl *AdminController) ListHeroSlides(c *gin.Context) {
+	slides, err := ctl.hero.ListAdmin(c.Request.Context())
+	if err != nil {
+		handleServiceError(c, err)
+		return
+	}
+	utils.OK(c, "Hero slides loaded.", slides)
+}
+
+func (ctl *AdminController) CreateHeroSlide(c *gin.Context) {
+	var input services.HeroSlideInput
+	if !bindAndValidate(c, &input) {
+		return
+	}
+	slide, err := ctl.hero.Create(c.Request.Context(), input, currentAdminID(c))
+	if err != nil {
+		handleServiceError(c, err)
+		return
+	}
+	utils.Created(c, "Hero slide created.", slide)
+}
+
+func (ctl *AdminController) UpdateHeroSlide(c *gin.Context) {
+	id, ok := uuidParam(c, "id")
+	if !ok {
+		return
+	}
+	var input services.HeroSlideInput
+	if !bindAndValidate(c, &input) {
+		return
+	}
+	slide, err := ctl.hero.Update(c.Request.Context(), id, input, currentAdminID(c))
+	if err != nil {
+		handleServiceError(c, err)
+		return
+	}
+	utils.OK(c, "Hero slide updated.", slide)
+}
+
+func (ctl *AdminController) DeleteHeroSlide(c *gin.Context) {
+	id, ok := uuidParam(c, "id")
+	if !ok {
+		return
+	}
+	if err := ctl.hero.Delete(c.Request.Context(), id, currentAdminID(c)); err != nil {
+		handleServiceError(c, err)
+		return
+	}
+	utils.OK(c, "Hero slide deleted.", nil)
+}
+
+func (ctl *AdminController) ListContent(c *gin.Context) {
+	pages, err := ctl.content.AdminList(c.Request.Context())
+	if err != nil {
+		handleServiceError(c, err)
+		return
+	}
+	utils.OK(c, "Content pages loaded.", pages)
+}
+
+func (ctl *AdminController) GetContent(c *gin.Context) {
+	page, err := ctl.content.AdminFindBySlug(c.Request.Context(), c.Param("slug"))
+	if err != nil {
+		handleServiceError(c, err)
+		return
+	}
+	utils.OK(c, "Content page loaded.", page)
+}
+
+func (ctl *AdminController) UpdateContent(c *gin.Context) {
+	var input services.UpdateContentInput
+	if !bindAndValidate(c, &input) {
+		return
+	}
+	page, err := ctl.content.Update(c.Request.Context(), *currentAdminID(c), c.Param("slug"), input, c.ClientIP())
+	if err != nil {
+		handleServiceError(c, err)
+		return
+	}
+	utils.OK(c, "Content page updated.", page)
 }

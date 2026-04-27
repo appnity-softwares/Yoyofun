@@ -7,9 +7,11 @@ import { useAuth } from "../../hooks/useAuth";
 
 const mobileItems = [
   ["Dashboard", "/admin/dashboard"],
+  ["Hero Landing", "/admin/hero"],
   ["Tickets", "/admin/tickets"],
   ["Bookings", "/admin/bookings"],
   ["Messages", "/admin/messages"],
+  ["Content Mgmt", "/admin/content", ["super_admin", "admin"]],
   ["Settings", "/admin/settings", ["super_admin", "admin"]],
   ["Users", "/admin/users", ["super_admin", "admin"]],
   ["Audit Logs", "/admin/audit-logs", ["super_admin", "admin"]],

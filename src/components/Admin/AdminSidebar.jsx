@@ -1,12 +1,14 @@
 import { NavLink } from "react-router-dom";
-import { BarChart3, BookOpen, ClipboardList, FileClock, LayoutDashboard, MessageSquare, Settings, Ticket, Users } from "lucide-react";
+import { BarChart3, BookOpen, ClipboardList, FileClock, LayoutDashboard, MessageSquare, Settings, Ticket, Users, FileText } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
 
 const navItems = [
   { label: "Dashboard", path: "/admin/dashboard", icon: LayoutDashboard },
+  { label: "Hero Landing", path: "/admin/hero", icon: BookOpen },
   { label: "Tickets", path: "/admin/tickets", icon: Ticket },
   { label: "Bookings", path: "/admin/bookings", icon: ClipboardList },
   { label: "Messages", path: "/admin/messages", icon: MessageSquare },
+  { label: "Content Mgmt", path: "/admin/content", icon: FileText, roles: ["super_admin", "admin"] },
   { label: "Settings", path: "/admin/settings", icon: Settings, roles: ["super_admin", "admin"] },
   { label: "Users", path: "/admin/users", icon: Users, roles: ["super_admin", "admin"] },
   { label: "Audit Logs", path: "/admin/audit-logs", icon: FileClock, roles: ["super_admin", "admin"] },

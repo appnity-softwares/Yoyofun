@@ -18,6 +18,8 @@ type Services struct {
 	Audit     *AuditService
 	Razorpay  *RazorpayService
 	Uploads   *UploadService
+	HeroSlides *HeroSlideService
+	Content    *ContentService
 }
 
 func New(cfg *config.Config, db *gorm.DB, repos *repositories.Repositories) *Services {
@@ -34,5 +36,7 @@ func New(cfg *config.Config, db *gorm.DB, repos *repositories.Repositories) *Ser
 		Audit:     audit,
 		Razorpay:  razorpay,
 		Uploads:   NewUploadService(cfg),
+		HeroSlides: NewHeroSlideService(repos.HeroSlides, audit),
+		Content:    NewContentService(db, audit),
 	}
 }

@@ -138,6 +138,30 @@ type AuditLog struct {
 	CreatedAt   time.Time      `json:"created_at"`
 }
 
+type HeroSlide struct {
+	ID          uuid.UUID `gorm:"type:uuid;primaryKey" json:"id"`
+	ImageURL    string    `gorm:"type:text;not null" json:"image_url"`
+	Headline    string    `gorm:"size:255;not null" json:"headline"`
+	Subheadline string    `gorm:"size:255" json:"subheadline"`
+	CTAUrl      string    `gorm:"size:255" json:"cta_url"`
+	CTAText     string    `gorm:"size:100" json:"cta_text"`
+	IsActive    bool      `gorm:"default:true" json:"is_active"`
+	SortOrder   int       `gorm:"default:0" json:"sort_order"`
+	CreatedAt   time.Time `json:"created_at"`
+	UpdatedAt   time.Time `json:"updated_at"`
+}
+
+type ContentPage struct {
+	ID          uuid.UUID      `gorm:"type:uuid;primaryKey" json:"id"`
+	Slug        string         `gorm:"size:180;uniqueIndex;not null" json:"slug"`
+	Title       string         `gorm:"size:255;not null" json:"title"`
+	Content     string         `gorm:"type:text" json:"content"`
+	IsPublished bool           `gorm:"not null;default:true" json:"is_published"`
+	UpdatedAt   time.Time      `json:"updated_at"`
+	CreatedAt   time.Time      `json:"created_at"`
+	DeletedAt   gorm.DeletedAt `gorm:"index" json:"-"`
+}
+
 func (m *AdminUser) BeforeCreate(tx *gorm.DB) error {
 	setUUID(&m.ID)
 	return nil
@@ -164,6 +188,16 @@ func (m *SiteSetting) BeforeCreate(tx *gorm.DB) error {
 }
 
 func (m *AuditLog) BeforeCreate(tx *gorm.DB) error {
+	setUUID(&m.ID)
+	return nil
+}
+
+func (m *HeroSlide) BeforeCreate(tx *gorm.DB) error {
+	setUUID(&m.ID)
+	return nil
+}
+
+func (m *ContentPage) BeforeCreate(tx *gorm.DB) error {
 	setUUID(&m.ID)
 	return nil
 }

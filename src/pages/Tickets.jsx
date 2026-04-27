@@ -158,7 +158,7 @@ function Tickets() {
 
                 {!loading && !loadError && (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mb-20 px-4">
-                        {tickets.map((t) => {
+                        {tickets.map((t, index) => {
                             const soldOut = t.stock <= 0;
                             const features = t.features?.length ? t.features : ['All Day Entry', 'Locker Access', 'Safety Gear Included'];
                             return (
@@ -167,6 +167,16 @@ function Tickets() {
                                     className="group relative bg-white p-10 rounded-[40px] border border-gray-100 shadow-[0_20px_50px_rgba(0,0,0,0.05)] transition-all duration-500 hover:shadow-[0_40px_80px_rgba(0,0,0,0.1)] hover:-translate-y-2 overflow-hidden"
                                 >
                                     <div className="absolute -top-10 -right-10 w-40 h-40 bg-blue-50 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                                    {index === 0 && (
+                                        <div className="absolute top-0 right-0 bg-yellow-400 text-black text-xs font-black px-4 py-2 rounded-bl-2xl z-20 shadow-lg uppercase tracking-widest">
+                                            BESTSELLER
+                                        </div>
+                                    )}
+                                    {index === 1 && (
+                                        <div className="absolute top-0 right-0 bg-purple-500 text-white text-xs font-black px-4 py-2 rounded-bl-2xl z-20 shadow-lg uppercase tracking-widest">
+                                            FAMILY FAVORITE
+                                        </div>
+                                    )}
 
                                     <div className="relative z-10">
                                         <div className="bg-blue-600 w-16 h-16 rounded-2xl flex items-center justify-center text-white mb-8 shadow-xl shadow-blue-500/20 group-hover:scale-110 transition-transform duration-500">
@@ -199,13 +209,23 @@ function Tickets() {
                                             {soldOut ? 'Sold Out' : 'Select Pass'}
                                         </button>
 
-                                        <p className="mt-4 text-center text-xs font-bold text-gray-400 uppercase tracking-widest">
-                                            {soldOut ? 'Sold out' : `${t.stock} Available`}
+                                        <p className={`mt-4 text-center text-xs font-bold uppercase tracking-widest ${soldOut ? 'text-gray-400' : (t.stock <= 20 ? 'text-red-500 animate-pulse' : 'text-gray-400')}`}>
+                                            {soldOut ? 'Sold out' : (t.stock <= 20 ? `🔥 Only ${t.stock} passes left` : `${t.stock} Available`)}
                                         </p>
                                     </div>
                                 </div>
                             );
                         })}
+                    </div>
+                )}
+
+                {/* Group Booking CTA */}
+                {!loading && !loadError && (
+                    <div className="max-w-3xl mx-auto mt-4 mb-20 px-4">
+                        <a href="https://wa.me/919752586956?text=Hi%20YOYO%2C%20I%20want%20to%20do%20a%20group%20booking" target="_blank" rel="noopener noreferrer" className="block bg-gradient-to-r from-blue-600 to-blue-800 rounded-3xl p-8 text-center shadow-xl shadow-blue-500/20 hover:scale-105 active:scale-95 transition-transform duration-300">
+                            <h3 className="text-2xl font-black text-white mb-2">Group of 10+?</h3>
+                            <p className="text-blue-100 font-medium">Get a custom discount on WhatsApp instantly.</p>
+                        </a>
                     </div>
                 )}
             </div>
@@ -357,9 +377,10 @@ function Tickets() {
                                     )}
                                 </button>
 
-                                <p className="text-xs text-center text-gray-400 font-bold uppercase tracking-widest">
-                                    Secure SSL encrypted payment
-                                </p>
+                                <div className="text-xs text-center text-gray-500 font-bold tracking-wide flex flex-col gap-1 items-center">
+                                    <span className="flex items-center gap-1 text-green-600"><Check size={14} /> 100% secure payment via Razorpay</span>
+                                    <span className="opacity-70">UPI / Card / NetBanking supported</span>
+                                </div>
                             </form>
                         </div>
                     </div>

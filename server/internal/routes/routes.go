@@ -33,7 +33,7 @@ func Setup(router *gin.Engine, cfg *config.Config, db *gorm.DB, repos *repositor
 	router.Static("/uploads", cfg.UploadDir)
 
 	authCtl := controllers.NewAuthController(svc.Auth, svc.Audit)
-	publicCtl := controllers.NewPublicController(svc.Tickets, svc.Bookings, svc.Contacts, svc.Settings)
+	publicCtl := controllers.NewPublicController(svc.Tickets, svc.Bookings, svc.Contacts, svc.Settings, svc.HeroSlides, svc.Content)
 	adminCtl := controllers.NewAdminController(svc)
 	webhookCtl := controllers.NewWebhookController(svc.Razorpay, svc.Bookings)
 
@@ -51,9 +51,11 @@ func Setup(router *gin.Engine, cfg *config.Config, db *gorm.DB, repos *repositor
 	api.GET("/tickets/:slug", publicCtl.TicketBySlug)
 	api.POST("/contact", middleware.RateLimit(cfg.ContactRateLimitPerHour, time.Hour), publicCtl.Contact)
 	api.GET("/settings/public", publicCtl.PublicSettings)
+	api.GET("/hero-slides", publicCtl.HeroSlides)
 	api.POST("/bookings/create-order", middleware.RateLimit(cfg.PaymentRateLimitPerHour, time.Hour), publicCtl.CreateOrder)
 	api.POST("/bookings/verify-payment", middleware.RateLimit(cfg.PaymentRateLimitPerHour, time.Hour), publicCtl.VerifyPayment)
 	api.POST("/webhooks/razorpay", webhookCtl.Razorpay)
+	api.GET("/content/:slug", publicCtl.GetContent)
 
 	adminAuth := api.Group("/admin/auth")
 	adminAuth.POST("/login", middleware.RateLimit(cfg.LoginRateLimitPerHour, time.Hour), authCtl.Login)
@@ -92,4 +94,13 @@ func Setup(router *gin.Engine, cfg *config.Config, db *gorm.DB, repos *repositor
 
 	admin.GET("/audit-logs", middleware.RequireRoles(models.RoleSuperAdmin, models.RoleAdmin), adminCtl.ListAuditLogs)
 	admin.POST("/uploads", middleware.RequireRoles(models.RoleSuperAdmin, models.RoleAdmin), adminCtl.Upload)
+
+	admin.GET("/hero-slides", adminCtl.ListHeroSlides)
+	admin.POST("/hero-slides", middleware.RequireRoles(models.RoleSuperAdmin, models.RoleAdmin), adminCtl.CreateHeroSlide)
+	admin.PATCH("/hero-slides/:id", middleware.RequireRoles(models.RoleSuperAdmin, models.RoleAdmin), adminCtl.UpdateHeroSlide)
+	admin.DELETE("/hero-slides/:id", middleware.RequireRoles(models.RoleSuperAdmin, models.RoleAdmin), adminCtl.DeleteHeroSlide)
+
+	admin.GET("/content", adminCtl.ListContent)
+	admin.GET("/content/:slug", adminCtl.GetContent)
+	admin.PATCH("/content/:slug", middleware.RequireRoles(models.RoleSuperAdmin, models.RoleAdmin), adminCtl.UpdateContent)
 }

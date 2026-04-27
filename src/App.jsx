@@ -14,6 +14,8 @@ import AdminMessages from "./pages/Admin/AdminMessages"
 import AdminSettings from "./pages/Admin/AdminSettings"
 import AdminUsers from "./pages/Admin/AdminUsers"
 import AdminAuditLogs from "./pages/Admin/AdminAuditLogs"
+import AdminHero from "./pages/Admin/AdminHero"
+import AdminContent from "./pages/Admin/AdminContent"
 import AdminLayout from "./components/Admin/AdminLayout"
 import ProtectedAdminRoute from "./components/Admin/ProtectedAdminRoute"
 import Privacy from "./pages/Privacy"
@@ -23,6 +25,8 @@ import FAQ from "./pages/FAQ"
 import Gallery from "./pages/Gallery"
 import ScrollToTop from "./components/ScrollToTop"
 import AuthProvider from "./context/AuthProvider"
+import FloatingWhatsApp from "./components/FloatingWhatsApp"
+import TopTicker from "./components/TopTicker"
 
 function AdminPage({ children, roles }) {
   return (
@@ -39,7 +43,12 @@ function AppShell() {
   return (
     <>
       <ScrollToTop />
-      {!isAdminRoute && <Navbar />}
+      {!isAdminRoute && (
+        <div className="fixed top-0 left-0 right-0 z-50">
+          <TopTicker />
+          <Navbar />
+        </div>
+      )}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/tickets" element={<Tickets />} />
@@ -52,14 +61,21 @@ function AppShell() {
         <Route path="/admin" element={<Navigate to="/admin/dashboard" replace />} />
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route path="/admin/dashboard" element={<AdminPage><AdminDashboard /></AdminPage>} />
+        <Route path="/admin/hero" element={<AdminPage><AdminHero /></AdminPage>} />
         <Route path="/admin/tickets" element={<AdminPage><AdminTickets /></AdminPage>} />
         <Route path="/admin/bookings" element={<AdminPage><AdminBookings /></AdminPage>} />
         <Route path="/admin/messages" element={<AdminPage><AdminMessages /></AdminPage>} />
+        <Route path="/admin/content" element={<AdminPage roles={["super_admin", "admin"]}><AdminContent /></AdminPage>} />
         <Route path="/admin/settings" element={<AdminPage roles={["super_admin", "admin"]}><AdminSettings /></AdminPage>} />
         <Route path="/admin/users" element={<AdminPage roles={["super_admin", "admin"]}><AdminUsers /></AdminPage>} />
         <Route path="/admin/audit-logs" element={<AdminPage roles={["super_admin", "admin"]}><AdminAuditLogs /></AdminPage>} />
       </Routes>
-      {!isAdminRoute && <Footer />}
+      {!isAdminRoute && (
+        <>
+          <Footer />
+          <FloatingWhatsApp />
+        </>
+      )}
     </>
   )
 }

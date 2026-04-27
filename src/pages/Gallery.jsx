@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Camera, X, Maximize2, ChevronLeft, ChevronRight, LayoutGrid } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const galleryItems = [
     {
@@ -203,9 +204,14 @@ const Gallery = () => {
                                     <span className="px-4 py-1.5 bg-blue-600 rounded-full text-[10px] font-black uppercase tracking-widest">{filteredItems[selectedIdx].category}</span>
                                     <h2 className="text-4xl md:text-5xl font-black tracking-tighter">{filteredItems[selectedIdx].title}</h2>
                                 </div>
-                                <div className="hidden md:block text-right">
-                                    <span className="text-lg font-black text-blue-500">{selectedIdx + 1}</span>
-                                    <span className="text-white/30 font-black"> / {filteredItems.length}</span>
+                                <div className="hidden md:flex flex-col items-end gap-3">
+                                    <div className="text-right">
+                                        <span className="text-lg font-black text-blue-500">{selectedIdx + 1}</span>
+                                        <span className="text-white/30 font-black"> / {filteredItems.length}</span>
+                                    </div>
+                                    <Link to="/tickets" onClick={(e) => e.stopPropagation()} className="bg-blue-600 hover:bg-blue-500 text-white px-6 py-2 rounded-full font-bold uppercase tracking-widest text-xs transition-all hover:scale-105 active:scale-95 shadow-lg shadow-blue-500/20">
+                                        Book Now
+                                    </Link>
                                 </div>
                             </div>
                         </div>
@@ -222,6 +228,16 @@ const Gallery = () => {
                         </div>
                     </div>
                 )}
+            </div>
+
+            {/* Sticky Bottom CTA */}
+            <div className="fixed bottom-0 left-0 right-0 p-4 bg-white/90 backdrop-blur-xl border-t border-gray-200 shadow-[0_-10px_40px_rgba(0,0,0,0.05)] z-[80] transform transition-transform duration-500 animate-in slide-in-from-bottom-full">
+                <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 px-4">
+                    <p className="text-gray-900 font-black text-lg md:text-xl tracking-tight">Like what you see? Experience it live.</p>
+                    <Link to="/tickets" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3.5 rounded-full font-black uppercase tracking-widest text-sm transition-all hover:scale-105 active:scale-95 shadow-xl shadow-blue-500/20 w-full md:w-auto text-center">
+                        Book Tickets Now
+                    </Link>
+                </div>
             </div>
         </div>
     );

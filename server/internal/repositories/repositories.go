@@ -18,6 +18,7 @@ type Repositories struct {
 	Messages   *ContactMessageRepository
 	Settings   *SiteSettingRepository
 	AuditLogs  *AuditLogRepository
+	HeroSlides *HeroSlideRepository
 }
 
 func New(db *gorm.DB) *Repositories {
@@ -28,6 +29,7 @@ func New(db *gorm.DB) *Repositories {
 		Messages:   NewContactMessageRepository(db),
 		Settings:   NewSiteSettingRepository(db),
 		AuditLogs:  NewAuditLogRepository(db),
+		HeroSlides: NewHeroSlideRepository(db),
 	}
 }
 
@@ -411,4 +413,45 @@ func (r *AuditLogRepository) List(ctx context.Context, filter AuditLogFilter, pa
 
 	err := query.Order("created_at DESC").Limit(limit).Offset((page - 1) * limit).Find(&logs).Error
 	return logs, total, err
+}
+
+type HeroSlideRepository struct {
+	db *gorm.DB
+}
+
+func NewHeroSlideRepository(db *gorm.DB) *HeroSlideRepository {
+	return &HeroSlideRepository{db: db}
+}
+
+func (r *HeroSlideRepository) ListPublic(ctx context.Context) ([]models.HeroSlide, error) {
+	var slides []models.HeroSlide
+	err := r.db.WithContext(ctx).
+		Where("is_active = ?", true).
+		Order("sort_order ASC, created_at ASC").
+		Find(&slides).Error
+	return slides, err
+}
+
+func (r *HeroSlideRepository) FindByID(ctx context.Context, id uuid.UUID) (*models.HeroSlide, error) {
+	var slide models.HeroSlide
+	err := r.db.WithContext(ctx).First(&slide, "id = ?", id).Error
+	return &slide, err
+}
+
+func (r *HeroSlideRepository) Create(ctx context.Context, slide *models.HeroSlide) error {
+	return r.db.WithContext(ctx).Create(slide).Error
+}
+
+func (r *HeroSlideRepository) Save(ctx context.Context, slide *models.HeroSlide) error {
+	return r.db.WithContext(ctx).Save(slide).Error
+}
+
+func (r *HeroSlideRepository) Delete(ctx context.Context, slide *models.HeroSlide) error {
+	return r.db.WithContext(ctx).Delete(slide).Error
+}
+
+func (r *HeroSlideRepository) ListAdmin(ctx context.Context) ([]models.HeroSlide, error) {
+	var slides []models.HeroSlide
+	err := r.db.WithContext(ctx).Order("sort_order ASC, created_at DESC").Find(&slides).Error
+	return slides, err
 }
