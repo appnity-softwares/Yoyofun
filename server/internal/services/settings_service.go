@@ -54,17 +54,28 @@ func (s *SettingsService) CreateDefault(ctx context.Context) (*models.SiteSettin
 		"onlineBooking": true,
 		"contactForm":   true,
 	})
+	homeSections, _ := json.Marshal(map[string]bool{
+		"hero":       true,
+		"tickets":    true,
+		"restaurant": true,
+		"suites":     true,
+		"halls":      true,
+		"gallery":    true,
+		"offers":     true,
+		"contact":    true,
+	})
 	setting := &models.SiteSetting{
-		SiteName:        "YOYO FUN N FOODS",
-		ContactEmail:    "hello@yoyofun.com",
-		PhoneNumbers:    datatypes.JSON(phones),
-		Address:         "YOYO FUN N FOODS, Madhya Pradesh, India",
-		SocialLinks:     datatypes.JSON(social),
-		MetaTitle:       "YOYO FUN N FOODS - Water Park Booking",
-		MetaDescription: "Book tickets for YOYO FUN N FOODS and enjoy a safe, fun-filled park experience.",
-		RazorpayEnabled: true,
-		MaintenanceMode: false,
-		FeatureToggles:  datatypes.JSON(toggles),
+		SiteName:         "YOYO FUN N FOODS",
+		ContactEmail:     "hello@yoyofun.com",
+		PhoneNumbers:     datatypes.JSON(phones),
+		Address:          "YOYO FUN N FOODS, Madhya Pradesh, India",
+		SocialLinks:      datatypes.JSON(social),
+		MetaTitle:        "YOYO FUN N FOODS - Water Park Booking",
+		MetaDescription:  "Book tickets for YOYO FUN N FOODS and enjoy a safe, fun-filled park experience.",
+		RazorpayEnabled:  true,
+		MaintenanceMode:  false,
+		FeatureToggles:   datatypes.JSON(toggles),
+		HomepageSections: datatypes.JSON(homeSections),
 	}
 	return setting, s.repo.Create(ctx, setting)
 }
