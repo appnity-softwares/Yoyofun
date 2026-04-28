@@ -130,5 +130,5 @@ html.lenis, html.lenis body {
 }
 
 .animate-infinite-scroll {
-  animation: infinite-scroll 6s linear infinite;
+  animation: infinite-scroll 20s linear infinite;
 }
